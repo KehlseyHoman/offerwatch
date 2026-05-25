@@ -1,0 +1,10 @@
+@use '../login/login' as login;
+
+// Same layout as login — reuse styles via the shared auth-container pattern
+.auth-container { @extend .auth-container; }
+.auth-card      { @extend .auth-card; }
+.logo           { @extend .logo; }
+.full-width     { @extend .full-width; }
+.submit-btn     { @extend .submit-btn; }
+.error-msg      { @extend .error-msg; }
+.switch-link    { @extend .switch-link; }

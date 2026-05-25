@@ -1,0 +1,170 @@
+<div class="page-content">
+
+  <!-- ── Header ────────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Interview Prep</h1>
+      <p class="page-subtitle">Curated questions from a senior recruiter's playbook + your personal notes</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="showAddForm.set(!showAddForm())">
+      <mat-icon>{{ showAddForm() ? 'close' : 'add' }}</mat-icon>
+      {{ showAddForm() ? 'Cancel' : 'Add Question' }}
+    </button>
+  </div>
+
+  <!-- ── Category filter ───────────────────────────────────────────────── -->
+  <div class="category-chips">
+    @for (cat of categories; track cat) {
+      <button class="cat-chip" [class.active]="activeCategory() === cat"
+              (click)="activeCategory.set(cat)">
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="centered"><mat-spinner diameter="48" /></div>
+  } @else {
+
+  <!-- ── Add question form ──────────────────────────────────────────────── -->
+  @if (showAddForm()) {
+    <section class="card add-card">
+      <h2 class="card-title"><mat-icon>add_circle_outline</mat-icon> Add a Question to My Notes</h2>
+      <form [formGroup]="addForm" class="add-form" (ngSubmit)="submitAdd()">
+        <div class="add-row">
+          <mat-form-field appearance="outline" class="field-category">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              @for (c of categories.slice(1); track c) {
+                <mat-option [value]="c">{{ c }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-question">
+            <mat-label>Question</mat-label>
+            <input matInput formControlName="question"
+                   placeholder="e.g. Tell me about a time you failed." />
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="field-notes" id="notes-field">
+          <mat-label>My answer / notes</mat-label>
+          <textarea matInput formControlName="notes" rows="5"
+                    placeholder="Your talking points, key phrases, story bullets — whatever helps you remember your answer."></textarea>
+          <mat-hint>Think STAR: Situation, Task, Action, Result</mat-hint>
+        </mat-form-field>
+        <div class="form-actions">
+          <button mat-button type="button" (click)="showAddForm.set(false); addForm.reset({category:'Behavioral'})">
+            Cancel
+          </button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="addForm.invalid">
+            Save Question
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <div class="two-col">
+
+    <!-- ── My Notes ──────────────────────────────────────────────────────── -->
+    <div class="left-col">
+      <h2 class="section-title">
+        <mat-icon>bookmark</mat-icon>
+        My Notes
+        <span class="count-badge">{{ filteredItems().length }}</span>
+      </h2>
+
+      @if (filteredItems().length === 0) {
+        <div class="empty-section">
+          <mat-icon>note_add</mat-icon>
+          <p>No saved notes yet for this category.<br>
+             Use a suggested question below or add your own.</p>
+        </div>
+      }
+
+      <div class="notes-list">
+        @for (item of filteredItems(); track item.id) {
+          <div class="note-card">
+            <div class="note-header">
+              <span class="note-cat-chip" [class]="'cat-' + item.category.toLowerCase().replace(' & ', '-').replace(' ', '-')">
+                {{ item.category }}
+              </span>
+              <div class="note-actions">
+                @if (editingId() !== item.id) {
+                  <button mat-icon-button matTooltip="Edit notes" (click)="startEdit(item)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+                <button mat-icon-button matTooltip="Delete" class="delete-btn" (click)="delete(item)">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <p class="note-question">{{ item.question }}</p>
+
+            @if (editingId() === item.id) {
+              <form [formGroup]="editForm" class="edit-form" (ngSubmit)="saveEdit(item)">
+                <mat-form-field appearance="outline" class="edit-notes-field">
+                  <mat-label>My answer / notes</mat-label>
+                  <textarea matInput formControlName="notes" rows="5"></textarea>
+                </mat-form-field>
+                <div class="form-actions">
+                  <button mat-button type="button" (click)="cancelEdit()">Cancel</button>
+                  <button mat-flat-button color="primary" type="submit">Save</button>
+                </div>
+              </form>
+            } @else if (item.notes) {
+              <p class="note-body">{{ item.notes }}</p>
+            } @else {
+              <p class="note-empty">No notes yet — click edit to add your answer.</p>
+            }
+
+            @if (item.updatedAt && editingId() !== item.id) {
+              <span class="note-date">Updated {{ item.updatedAt | date:'MMM d, y' }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ── Suggested Questions ────────────────────────────────────────────── -->
+    <div class="right-col">
+      <h2 class="section-title">
+        <mat-icon>psychology</mat-icon>
+        Suggested Questions
+      </h2>
+      <p class="section-subtitle">
+        Click <strong>+ Use This</strong> to pre-fill a question into your notes.
+        Questions you've already saved are marked.
+      </p>
+
+      <div class="suggested-groups">
+        @for (group of filteredSuggestions(); track group.category) {
+          <div class="suggested-group">
+            <h3 class="group-title">{{ group.category }}</h3>
+            <div class="suggested-list">
+              @for (q of group.questions; track q) {
+                <div class="suggested-item" [class.saved]="isSaved(q)">
+                  <span class="suggested-q">{{ q }}</span>
+                  @if (isSaved(q)) {
+                    <span class="saved-badge"><mat-icon>check_circle</mat-icon> Saved</span>
+                  } @else {
+                    <button mat-stroked-button class="use-btn"
+                            (click)="addSuggested(group.category, q)">
+                      <mat-icon>add</mat-icon> Use This
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  } <!-- end @else (not loading) -->
+
+</div>

@@ -1,0 +1,72 @@
+// ── Toolbar ───────────────────────────────────────────────────────────────
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+  gap: 4px;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  margin-right: 12px;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+// ── Nav links ─────────────────────────────────────────────────────────────
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  a[mat-button] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    border-radius: 8px;
+    opacity: .72;
+    transition: opacity .15s;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover { opacity: 1; }
+
+    &.nav-active {
+      opacity: 1;
+      font-weight: 600;
+      background: rgba(0, 0, 0, .06);
+    }
+  }
+}
+
+// Hide text labels on small screens, keep icons
+@media (max-width: 680px) {
+  .nav-label { display: none; }
+  .logo-link  { margin-right: 4px; }
+}
+
+@media (max-width: 440px) {
+  .logo-text { font-size: 15px; }
+}
+
+// ── Right side ────────────────────────────────────────────────────────────
+.spacer { flex: 1; }
+
+.user-name {
+  font-size: 13px;
+  opacity: .7;
+  margin-right: 2px;
+
+  @media (max-width: 540px) { display: none; }
+}

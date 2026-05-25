@@ -1,0 +1,167 @@
+<div class="page-content">
+
+  <!-- ── Page header ──────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">My Applications</h1>
+      <p class="page-subtitle">Tracking your job search pipeline</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon> Add application
+    </button>
+  </div>
+
+  <!-- ── Metrics bar ──────────────────────────────────────────────────────── -->
+  @if (!loading()) {
+    <div class="metrics-bar">
+      <div class="metric-card metric-total">
+        <span class="metric-value">{{ total() }}</span>
+        <span class="metric-label">Total</span>
+      </div>
+      <div class="metric-divider"></div>
+      @for (row of metricRows; track row.key) {
+        <div class="metric-card" [class]="'metric-' + row.key">
+          <span class="metric-value">{{ statCounts()[row.key] }}</span>
+          <span class="metric-label">{{ row.label }}</span>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── Loading ──────────────────────────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="centered"><mat-spinner diameter="48" /></div>
+  }
+
+  <!-- ── Empty state ──────────────────────────────────────────────────────── -->
+  @else if (dataSource.data.length === 0) {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">work_outline</mat-icon>
+      <h2>No applications yet</h2>
+      <p>Add your first application to start tracking your job search.</p>
+      <button mat-flat-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon> Add application
+      </button>
+    </div>
+  }
+
+  <!-- ── Applications table ───────────────────────────────────────────────── -->
+  @else {
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table mat-table [dataSource]="dataSource" matSort class="app-table">
+
+          <!-- ── Company + Role ───────────────────────────────────────────── -->
+          <ng-container matColumnDef="company" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-company">Company</th>
+            <td mat-cell *matCellDef="let app" class="col-company">
+              <a class="company-cell" [routerLink]="['/applications', app.id]">
+                <span class="company-name">{{ app.company }}</span>
+                @if (app.roleTitle) {
+                  <span class="role-name">{{ app.roleTitle }}</span>
+                }
+              </a>
+            </td>
+          </ng-container>
+
+          <!-- ── Status ───────────────────────────────────────────────────── -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-status">Status</th>
+            <td mat-cell *matCellDef="let app" class="col-status">
+              <button mat-button class="status-btn" [class]="'status-' + app.status"
+                      [matMenuTriggerFor]="statusMenu" matTooltip="Click to change status">
+                {{ label(app.status) }}
+                <mat-icon class="chevron-icon">expand_more</mat-icon>
+              </button>
+              <mat-menu #statusMenu="matMenu">
+                @for (s of statuses; track s) {
+                  <button mat-menu-item (click)="onStatusChange($any(app), s)">
+                    <span class="status-dot" [class]="'dot-' + s"></span>
+                    {{ statusLabels[s] }}
+                    @if (app.status === s) { <mat-icon class="check-icon">check</mat-icon> }
+                  </button>
+                }
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <!-- ── Location ─────────────────────────────────────────────────── -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-location">Location</th>
+            <td mat-cell *matCellDef="let app" class="col-location secondary-cell">
+              {{ app.location || '—' }}
+            </td>
+          </ng-container>
+
+          <!-- ── Salary ───────────────────────────────────────────────────── -->
+          <ng-container matColumnDef="salary">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-salary">Salary</th>
+            <td mat-cell *matCellDef="let app" class="col-salary secondary-cell">
+              @if (app.salaryMin || app.salaryMax) {
+                <span class="salary-range">
+                  ${{ app.salaryMin | number:'1.0-0' }}
+                  @if (app.salaryMax && app.salaryMax !== app.salaryMin) {
+                    – ${{ app.salaryMax | number:'1.0-0' }}
+                  }
+                </span>
+              } @else { — }
+            </td>
+          </ng-container>
+
+          <!-- ── Applied date ──────────────────────────────────────────────── -->
+          <ng-container matColumnDef="appliedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-date">Applied</th>
+            <td mat-cell *matCellDef="let app" class="col-date secondary-cell">
+              {{ app.appliedDate ? (app.appliedDate | date:'MMM d, y') : '—' }}
+            </td>
+          </ng-container>
+
+          <!-- ── Last activity ─────────────────────────────────────────────── -->
+          <ng-container matColumnDef="lastActivity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-activity">
+              Last activity
+            </th>
+            <td mat-cell *matCellDef="let app" class="col-activity">
+              <span class="activity-badge" [class]="activityClass(app.updatedAt)"
+                    [matTooltip]="(app.updatedAt | date:'MMM d, y · h:mm a') ?? ''">
+                {{ relativeTime(app.updatedAt) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- ── Job link ──────────────────────────────────────────────────── -->
+          <ng-container matColumnDef="link">
+            <th mat-header-cell *matHeaderCellDef class="col-icon"></th>
+            <td mat-cell *matCellDef="let app" class="col-icon">
+              @if (app.jobUrl) {
+                <a [href]="app.jobUrl" target="_blank" rel="noopener noreferrer"
+                   mat-icon-button matTooltip="View job posting">
+                  <mat-icon>open_in_new</mat-icon>
+                </a>
+              }
+            </td>
+          </ng-container>
+
+          <!-- ── Actions ──────────────────────────────────────────────────── -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="col-actions"></th>
+            <td mat-cell *matCellDef="let app" class="col-actions">
+              <button mat-icon-button matTooltip="Edit" (click)="openEdit($any(app))">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Delete" class="delete-btn"
+                      (click)="delete($any(app))">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="app-row"></tr>
+
+        </table>
+      </div>
+    </div>
+  }
+
+</div>

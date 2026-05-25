@@ -1,0 +1,279 @@
+<div class="page-content">
+
+  <!-- ── Header ────────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Behavioral Stories</h1>
+      <p class="page-subtitle">Write your STAR stories once — spin them for any question variation</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="showAddForm.set(!showAddForm())">
+      <mat-icon>{{ showAddForm() ? 'close' : 'add' }}</mat-icon>
+      {{ showAddForm() ? 'Cancel' : 'Add Story' }}
+    </button>
+  </div>
+
+  <!-- ── Theme filter ──────────────────────────────────────────────────── -->
+  <div class="theme-chips">
+    @for (theme of themes; track theme) {
+      <button class="theme-chip" [class.active]="filterTheme() === theme"
+              [style.--chip-color]="theme !== 'All' ? themeColor(theme) : ''"
+              [style.--chip-bg]="theme !== 'All' ? themeBg(theme) : ''"
+              (click)="filterTheme.set(theme)">
+        {{ theme }}
+        @if (theme !== 'All' && themeCounts()[theme]) {
+          <span class="chip-count">{{ themeCounts()[theme] }}</span>
+        }
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="centered"><mat-spinner diameter="48" /></div>
+  } @else {
+
+  <!-- ── Add story form ────────────────────────────────────────────────── -->
+  @if (showAddForm()) {
+    <section class="card add-card">
+      <h2 class="card-title"><mat-icon>add_circle_outline</mat-icon> New Story</h2>
+      <p class="card-hint">Fill in as much or as little as you want. The STAR sections are optional but highly recommended.</p>
+
+      <form [formGroup]="addForm" class="story-form" (ngSubmit)="submitAdd()">
+
+        <div class="form-row-top">
+          <mat-form-field appearance="outline">
+            <mat-label>Theme *</mat-label>
+            <mat-select formControlName="theme">
+              @for (t of themes.slice(1); track t) {
+                <mat-option [value]="t">{{ t }}</mat-option>
+              }
+            </mat-select>
+            <mat-hint>{{ addForm.value.theme ? themeTips[addForm.value.theme] : 'Choose a theme' }}</mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Story title (your shorthand)</mat-label>
+            <input matInput formControlName="title"
+                   placeholder="e.g. Led migration to microservices at Acme" />
+            <mat-hint>A label to help you remember which story this is</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="star-grid">
+          <div class="star-field">
+            <div class="star-label s-label">S — Situation</div>
+            <mat-form-field appearance="outline" class="full">
+              <textarea matInput formControlName="situation" rows="3"
+                        placeholder="Set the scene. What was the context and who was involved?"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="star-field">
+            <div class="star-label t-label">T — Task</div>
+            <mat-form-field appearance="outline" class="full">
+              <textarea matInput formControlName="task" rows="3"
+                        placeholder="What was your specific responsibility or goal?"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="star-field">
+            <div class="star-label a-label">A — Action</div>
+            <mat-form-field appearance="outline" class="full">
+              <textarea matInput formControlName="action" rows="4"
+                        placeholder="What did you do? Be specific — this is your biggest section."></textarea>
+            </mat-form-field>
+          </div>
+          <div class="star-field">
+            <div class="star-label r-label">R — Result</div>
+            <mat-form-field appearance="outline" class="full">
+              <textarea matInput formControlName="result" rows="3"
+                        placeholder="What was the outcome? Quantify it if you can (%, $, time saved, etc.)."></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Applicable question variations</mat-label>
+          <textarea matInput formControlName="applicableQuestions" rows="2"
+                    placeholder="e.g. 'Tell me about a time you led a team', 'Describe leading without authority', 'How do you motivate people?'"></textarea>
+          <mat-hint>List question variations this story can answer — helps you quickly match it during prep</mat-hint>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-button type="button"
+                  (click)="showAddForm.set(false); addForm.reset()">Cancel</button>
+          <button mat-flat-button color="primary" type="submit"
+                  [disabled]="addForm.invalid">Save Story</button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <!-- ── Stories grid ──────────────────────────────────────────────────── -->
+  @if (filteredStories().length === 0 && !showAddForm()) {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">auto_stories</mat-icon>
+      @if (filterTheme() !== 'All') {
+        <h2>No {{ filterTheme() }} stories yet</h2>
+        <p>Add a story above or change the theme filter.</p>
+      } @else {
+        <h2>No stories yet</h2>
+        <p>Add your first STAR story — you only need to write it once, then you can spin it for different questions.</p>
+        <button mat-flat-button color="primary" (click)="showAddForm.set(true)">
+          <mat-icon>add</mat-icon> Add Story
+        </button>
+      }
+    </div>
+  }
+
+  <div class="stories-grid">
+    @for (story of filteredStories(); track story.id) {
+
+      <!-- Story card -->
+      <div class="story-card" [class.expanded]="expandedId() === story.id">
+
+        <div class="story-card-header" (click)="editingId() !== story.id && toggleExpand(story.id)">
+          <span class="story-theme-chip"
+                [style.color]="themeColor(story.theme)"
+                [style.background]="themeBg(story.theme)">
+            {{ story.theme }}
+          </span>
+
+          <div class="story-titles">
+            <h3 class="story-title">{{ story.title || ('A ' + story.theme + ' story') }}</h3>
+            @if (story.situation) {
+              <p class="story-preview">{{ story.situation | slice:0:120 }}{{ story.situation.length > 120 ? '…' : '' }}</p>
+            }
+          </div>
+
+          <div class="story-card-actions" (click)="$event.stopPropagation()">
+            @if (editingId() !== story.id) {
+              <button mat-icon-button matTooltip="Edit story" (click)="startEdit(story); expandedId.set(story.id)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+            <button mat-icon-button matTooltip="Delete" class="delete-btn" (click)="delete(story)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+            <mat-icon class="expand-icon">
+              {{ expandedId() === story.id ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
+        </div>
+
+        <!-- Expanded content (view or edit) -->
+        @if (expandedId() === story.id) {
+
+          @if (editingId() === story.id) {
+            <!-- ── Edit form ────────────────────────────────────────────── -->
+            <form [formGroup]="editForm" class="story-form edit-section"
+                  (ngSubmit)="saveEdit(story)">
+
+              <div class="form-row-top">
+                <mat-form-field appearance="outline">
+                  <mat-label>Theme *</mat-label>
+                  <mat-select formControlName="theme">
+                    @for (t of themes.slice(1); track t) {
+                      <mat-option [value]="t">{{ t }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Story title</mat-label>
+                  <input matInput formControlName="title" />
+                </mat-form-field>
+              </div>
+
+              <div class="star-grid">
+                <div class="star-field">
+                  <div class="star-label s-label">S — Situation</div>
+                  <mat-form-field appearance="outline" class="full">
+                    <textarea matInput formControlName="situation" rows="3"></textarea>
+                  </mat-form-field>
+                </div>
+                <div class="star-field">
+                  <div class="star-label t-label">T — Task</div>
+                  <mat-form-field appearance="outline" class="full">
+                    <textarea matInput formControlName="task" rows="3"></textarea>
+                  </mat-form-field>
+                </div>
+                <div class="star-field">
+                  <div class="star-label a-label">A — Action</div>
+                  <mat-form-field appearance="outline" class="full">
+                    <textarea matInput formControlName="action" rows="4"></textarea>
+                  </mat-form-field>
+                </div>
+                <div class="star-field">
+                  <div class="star-label r-label">R — Result</div>
+                  <mat-form-field appearance="outline" class="full">
+                    <textarea matInput formControlName="result" rows="3"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <mat-form-field appearance="outline" class="full">
+                <mat-label>Applicable question variations</mat-label>
+                <textarea matInput formControlName="applicableQuestions" rows="2"></textarea>
+              </mat-form-field>
+
+              <div class="form-actions">
+                <button mat-button type="button" (click)="cancelEdit()">Cancel</button>
+                <button mat-flat-button color="primary" type="submit"
+                        [disabled]="editForm.invalid">Save Changes</button>
+              </div>
+            </form>
+
+          } @else {
+            <!-- ── View ───────────────────────────────────────────────── -->
+            <div class="story-detail">
+              @if (story.situation || story.task || story.action || story.result) {
+                <div class="star-grid view-grid">
+
+                  @if (story.situation) {
+                    <div class="star-section">
+                      <div class="star-label s-label">S — Situation</div>
+                      <p class="star-text">{{ story.situation }}</p>
+                    </div>
+                  }
+                  @if (story.task) {
+                    <div class="star-section">
+                      <div class="star-label t-label">T — Task</div>
+                      <p class="star-text">{{ story.task }}</p>
+                    </div>
+                  }
+                  @if (story.action) {
+                    <div class="star-section">
+                      <div class="star-label a-label">A — Action</div>
+                      <p class="star-text">{{ story.action }}</p>
+                    </div>
+                  }
+                  @if (story.result) {
+                    <div class="star-section">
+                      <div class="star-label r-label">R — Result</div>
+                      <p class="star-text">{{ story.result }}</p>
+                    </div>
+                  }
+
+                </div>
+              } @else {
+                <p class="no-star-hint">
+                  <mat-icon>info_outline</mat-icon>
+                  No STAR content yet — click edit to fill in your story.
+                </p>
+              }
+
+              @if (story.applicableQuestions) {
+                <div class="applicable-section">
+                  <span class="applicable-label">Answers questions like:</span>
+                  <p class="applicable-text">{{ story.applicableQuestions }}</p>
+                </div>
+              }
+            </div>
+          }
+
+        } <!-- end if expanded -->
+
+      </div>
+
+    }
+  </div>
+
+  } <!-- end @else (not loading) -->
+
+</div>

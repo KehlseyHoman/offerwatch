@@ -1,0 +1,349 @@
+<!-- ── Loading ──────────────────────────────────────────────────────────── -->
+@if (loading()) {
+  <div class="centered"><mat-spinner diameter="48" /></div>
+}
+
+@else if (app(); as a) {
+<div class="page">
+
+  <!-- Back link -->
+  <div class="back-row">
+    <button mat-button class="back-btn" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Applications
+    </button>
+  </div>
+
+  <!-- ══ OVERVIEW CARD ══════════════════════════════════════════════════════ -->
+  <section class="overview-card">
+
+    <div class="overview-header">
+      <div class="overview-titles">
+        <h1 class="company">{{ a.company }}</h1>
+        @if (a.roleTitle) { <p class="role">{{ a.roleTitle }}</p> }
+      </div>
+
+      <!-- Status pill + inline change -->
+      <button mat-button class="status-btn" [class]="'status-' + a.status"
+              [matMenuTriggerFor]="statusMenu" matTooltip="Change status">
+        {{ label(a.status) }}
+        <mat-icon class="chevron">expand_more</mat-icon>
+      </button>
+      <mat-menu #statusMenu>
+        @for (s of statuses; track s) {
+          <button mat-menu-item (click)="onStatusChange(s)">
+            <span class="dot" [class]="'dot-' + s"></span>
+            {{ statusLabels[s] }}
+            @if (a.status === s) { <mat-icon class="check">check</mat-icon> }
+          </button>
+        }
+      </mat-menu>
+    </div>
+
+    <!-- Meta row -->
+    <div class="meta-row">
+      @if (a.location) {
+        <span class="meta-item"><mat-icon>location_on</mat-icon>{{ a.location }}</span>
+      }
+      @if (a.appliedDate) {
+        <span class="meta-item">
+          <mat-icon>calendar_today</mat-icon>Applied {{ a.appliedDate | date:'MMM d, y' }}
+        </span>
+      }
+      @if (a.salaryMin || a.salaryMax) {
+        <span class="meta-item">
+          <mat-icon>payments</mat-icon>
+          ${{ a.salaryMin?.toLocaleString() }}
+          @if (a.salaryMax) { – ${{ a.salaryMax.toLocaleString() }} }
+        </span>
+      }
+      @if (a.source) {
+        <span class="meta-item"><mat-icon>travel_explore</mat-icon>{{ a.source }}</span>
+      }
+      @if (a.updatedAt) {
+        <span class="meta-item secondary">
+          <mat-icon>update</mat-icon>Last activity {{ a.updatedAt | date:'MMM d, y' }}
+        </span>
+      }
+    </div>
+
+    @if (a.jobUrl) {
+      <a [href]="a.jobUrl" target="_blank" rel="noopener" class="job-link">
+        <mat-icon>open_in_new</mat-icon> View job posting
+      </a>
+    }
+  </section>
+
+  <!-- ══ DOCUMENTS CARD ════════════════════════════════════════════════════ -->
+  <section class="card docs-card">
+    <form [formGroup]="docsForm" class="docs-form">
+
+      <!-- Resume & cover letter -->
+      <div class="docs-row">
+        <div class="docs-col">
+          <h3 class="docs-label">
+            <mat-icon>description</mat-icon> Resume version
+          </h3>
+          <mat-form-field appearance="outline" class="docs-field">
+            <input matInput formControlName="resumeVersion"
+                   placeholder="e.g. engineering-v3, generic-2026" />
+            <mat-hint>Filename or tag — keep the actual file in your resume folder</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="docs-col">
+          <h3 class="docs-label">
+            <mat-icon>article</mat-icon> Cover letter
+          </h3>
+          <mat-form-field appearance="outline" class="docs-field">
+            <textarea matInput formControlName="coverLetterNotes" rows="2"
+                      placeholder="e.g. Custom — led with distributed systems exp.  OR  None"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Application questions -->
+      <div class="docs-questions">
+        <h3 class="docs-label">
+          <mat-icon>quiz</mat-icon> Application questions
+        </h3>
+        <mat-form-field appearance="outline" class="docs-field full-width">
+          <textarea matInput formControlName="applicationQuestions" rows="5"
+                    placeholder="Paste any unusual questions asked in the application (e.g. &quot;Why do you want to work here?&quot;, technical prompts, etc.) and your answers.">
+          </textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="docs-actions">
+        <button mat-flat-button color="primary" type="button"
+                (click)="saveDocs()" [disabled]="savingDocs()">
+          @if (savingDocs()) { <mat-spinner diameter="16" /> } @else { Save }
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <div class="content-grid">
+
+    <!-- ══ LEFT COLUMN ════════════════════════════════════════════════════ -->
+    <div class="left-col">
+
+      <!-- ── Notes ──────────────────────────────────────────────────────── -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title"><mat-icon>sticky_note_2</mat-icon> Notes</h2>
+        </div>
+
+        <!-- Add note form -->
+        <form [formGroup]="noteForm" class="note-form" (ngSubmit)="addNote()">
+          <mat-form-field appearance="outline" class="note-field">
+            <mat-label>Add a note…</mat-label>
+            <textarea matInput formControlName="body" rows="3"
+                      placeholder="e.g. Had a great call with the recruiter — moving to next round.">
+            </textarea>
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit"
+                    [disabled]="noteForm.invalid || savingNote()">
+              @if (savingNote()) { <mat-spinner diameter="16" /> } @else { Save note }
+            </button>
+          </div>
+        </form>
+
+        <mat-divider />
+
+        <!-- Note list -->
+        @if (notes().length === 0) {
+          <p class="empty-hint">No notes yet. Add one above.</p>
+        } @else {
+          <div class="note-list">
+            @for (note of notes(); track note.id) {
+              <div class="note-item">
+                <p class="note-body">{{ note.body }}</p>
+                <div class="note-footer">
+                  <span class="note-date">{{ note.createdAt | date:'MMM d, y · h:mm a' }}</span>
+                  <button mat-icon-button class="delete-btn" matTooltip="Delete note"
+                          (click)="deleteNote(note)">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <mat-divider />
+            }
+          </div>
+        }
+      </section>
+
+    </div>
+
+    <!-- ══ RIGHT COLUMN ═══════════════════════════════════════════════════ -->
+    <div class="right-col">
+
+      <!-- ── Contacts ───────────────────────────────────────────────────── -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title"><mat-icon>person</mat-icon> Contacts</h2>
+          @if (!addingContact()) {
+            <button mat-stroked-button (click)="addingContact.set(true)">
+              <mat-icon>add</mat-icon> Add
+            </button>
+          }
+        </div>
+
+        <!-- Add contact form -->
+        @if (addingContact()) {
+          <form [formGroup]="contactForm" class="sub-form" (ngSubmit)="submitContact()">
+            <mat-form-field appearance="outline">
+              <mat-label>Name *</mat-label>
+              <input matInput formControlName="name" placeholder="Sarah Johnson" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title" placeholder="Technical Recruiter" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" type="email" placeholder="sarah@company.com" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" placeholder="415-555-0102" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>LinkedIn URL</mat-label>
+              <input matInput formControlName="linkedinUrl" placeholder="https://linkedin.com/in/..." />
+            </mat-form-field>
+            <div class="form-actions">
+              <button mat-button type="button" (click)="addingContact.set(false); contactForm.reset()">
+                Cancel
+              </button>
+              <button mat-flat-button color="primary" type="submit" [disabled]="contactForm.invalid">
+                Add contact
+              </button>
+            </div>
+          </form>
+          <mat-divider />
+        }
+
+        <!-- Contact list -->
+        @if (contacts().length === 0 && !addingContact()) {
+          <p class="empty-hint">No contacts yet.</p>
+        }
+        @for (c of contacts(); track c.id) {
+          <div class="contact-item">
+            <div class="contact-avatar">{{ c.name[0] | uppercase }}</div>
+            <div class="contact-info">
+              <span class="contact-name">{{ c.name }}</span>
+              @if (c.title) { <span class="contact-detail">{{ c.title }}</span> }
+              @if (c.email) {
+                <a class="contact-detail contact-link" [href]="'mailto:' + c.email">
+                  <mat-icon class="inline-icon">email</mat-icon>{{ c.email }}
+                </a>
+              }
+              @if (c.phone) {
+                <a class="contact-detail contact-link" [href]="'tel:' + c.phone">
+                  <mat-icon class="inline-icon">phone</mat-icon>{{ c.phone }}
+                </a>
+              }
+              @if (c.linkedinUrl) {
+                <a class="contact-detail contact-link" [href]="c.linkedinUrl"
+                   target="_blank" rel="noopener">
+                  <mat-icon class="inline-icon">link</mat-icon>LinkedIn
+                </a>
+              }
+            </div>
+            <button mat-icon-button class="delete-btn" matTooltip="Remove contact"
+                    (click)="deleteContact(c)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+          <mat-divider />
+        }
+      </section>
+
+      <!-- ── Follow-ups ─────────────────────────────────────────────────── -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title"><mat-icon>event_available</mat-icon> Follow-ups</h2>
+          @if (!addingFollowup()) {
+            <button mat-stroked-button (click)="addingFollowup.set(true)">
+              <mat-icon>add</mat-icon> Add
+            </button>
+          }
+        </div>
+
+        <!-- Add follow-up form -->
+        @if (addingFollowup()) {
+          <form [formGroup]="followupForm" class="sub-form followup-form" (ngSubmit)="submitFollowup()">
+            <mat-form-field appearance="outline" class="span-2">
+              <mat-label>What to follow up on</mat-label>
+              <input matInput formControlName="reason" placeholder="e.g. Send thank-you email" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Due date</mat-label>
+              <input matInput [matDatepicker]="fuPicker" formControlName="dueDate" placeholder="MM/DD/YYYY" />
+              <mat-datepicker-toggle matIconSuffix [for]="fuPicker" />
+              <mat-datepicker #fuPicker />
+            </mat-form-field>
+            <div class="form-actions span-2">
+              <button mat-button type="button"
+                      (click)="addingFollowup.set(false); followupForm.reset()">
+                Cancel
+              </button>
+              <button mat-flat-button color="primary" type="submit">Add follow-up</button>
+            </div>
+          </form>
+          <mat-divider />
+        }
+
+        <!-- Pending -->
+        @if (pendingFollowups().length === 0 && doneFollowups().length === 0 && !addingFollowup()) {
+          <p class="empty-hint">No follow-ups yet.</p>
+        }
+        @for (fu of pendingFollowups(); track fu.id) {
+          <div class="followup-item">
+            <mat-checkbox [checked]="fu.completed" (change)="toggleFollowup(fu)" color="primary" />
+            <div class="followup-info">
+              @if (fu.reason) { <span class="followup-reason">{{ fu.reason }}</span> }
+              @if (fu.dueDate) {
+                <span class="followup-date">
+                  <mat-icon class="inline-icon">calendar_today</mat-icon>
+                  {{ fu.dueDate | date:'MMM d, y' }}
+                </span>
+              }
+            </div>
+            <button mat-icon-button class="delete-btn" matTooltip="Delete"
+                    (click)="deleteFollowup(fu)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+          <mat-divider />
+        }
+
+        <!-- Completed (collapsed section) -->
+        @if (doneFollowups().length > 0) {
+          <p class="done-label">Completed ({{ doneFollowups().length }})</p>
+          @for (fu of doneFollowups(); track fu.id) {
+            <div class="followup-item done">
+              <mat-checkbox [checked]="fu.completed" (change)="toggleFollowup(fu)" color="primary" />
+              <div class="followup-info">
+                @if (fu.reason) { <span class="followup-reason">{{ fu.reason }}</span> }
+                @if (fu.dueDate) {
+                  <span class="followup-date">
+                    <mat-icon class="inline-icon">calendar_today</mat-icon>
+                    {{ fu.dueDate | date:'MMM d, y' }}
+                  </span>
+                }
+              </div>
+              <button mat-icon-button class="delete-btn" matTooltip="Delete"
+                      (click)="deleteFollowup(fu)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+            <mat-divider />
+          }
+        }
+      </section>
+
+    </div>
+  </div>
+</div>
+}

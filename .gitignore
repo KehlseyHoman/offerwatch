@@ -1,0 +1,21 @@
+# ─── macOS ───────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ─── Claude Code internal files ───────────────────────────────────────────────
+.claude/
+.agents/
+skills-lock.json
+OFFERWATCH_CONTEXT.md
+
+# ─── IDE / editor ────────────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+!offerwatch-frontend/.vscode/mcp.json
+
+# ─── Secrets ─────────────────────────────────────────────────────────────────
+.env
+*.env.local
+*.env.production

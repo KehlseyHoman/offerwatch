@@ -1,0 +1,18 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+  padding-top: 8px;
+
+  .span-2 { grid-column: span 2; }
+}
+
+.error-msg {
+  color: var(--mat-sys-error);
+  font-size: 13px;
+  margin: 0;
+}
+
+mat-dialog-content {
+  min-width: min(500px, 90vw);
+}

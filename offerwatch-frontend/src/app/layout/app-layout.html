@@ -1,0 +1,46 @@
+<!-- ── Shared navigation toolbar ─────────────────────────────────────────── -->
+<mat-toolbar class="toolbar">
+
+  <a class="logo-link" routerLink="/dashboard">
+    <span class="logo-text">Offerwatch</span>
+  </a>
+
+  <nav class="nav-links">
+    <a mat-button routerLink="/dashboard" routerLinkActive="nav-active"
+       [routerLinkActiveOptions]="{exact: true}" matTooltip="My Applications">
+      <mat-icon>work_outline</mat-icon>
+      <span class="nav-label">Applications</span>
+    </a>
+    <a mat-button routerLink="/stats" routerLinkActive="nav-active"
+       matTooltip="Analytics & Stats">
+      <mat-icon>bar_chart</mat-icon>
+      <span class="nav-label">Stats</span>
+    </a>
+    <a mat-button routerLink="/interview-prep" routerLinkActive="nav-active"
+       matTooltip="Interview Preparation">
+      <mat-icon>psychology</mat-icon>
+      <span class="nav-label">Interview Prep</span>
+    </a>
+    <a mat-button routerLink="/behavioral-stories" routerLinkActive="nav-active"
+       matTooltip="STAR Method Stories">
+      <mat-icon>auto_stories</mat-icon>
+      <span class="nav-label">Stories</span>
+    </a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <span class="user-name">Hi, {{ userName }}</span>
+  <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="Account">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #userMenu>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon> Sign out
+    </button>
+  </mat-menu>
+
+</mat-toolbar>
+
+<!-- ── Routed page content ──────────────────────────────────────────────── -->
+<router-outlet />

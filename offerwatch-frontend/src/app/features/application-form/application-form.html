@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit application' : 'Add application' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <!-- Company -->
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Company *</mat-label>
+      <input matInput formControlName="company" placeholder="e.g. Google" />
+      @if (form.get('company')?.hasError('required')) {
+        <mat-error>Company is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Role -->
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Role / title</mat-label>
+      <input matInput formControlName="roleTitle" placeholder="e.g. Software Engineer" />
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (s of statuses; track s) {
+          <mat-option [value]="s">{{ statusLabels[s] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Location -->
+    <mat-form-field appearance="outline">
+      <mat-label>Location</mat-label>
+      <input matInput formControlName="location" placeholder="e.g. Remote" />
+    </mat-form-field>
+
+    <!-- Job URL -->
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Job posting URL</mat-label>
+      <input matInput formControlName="jobUrl" type="url" placeholder="https://..." />
+    </mat-form-field>
+
+    <!-- Salary range -->
+    <mat-form-field appearance="outline">
+      <mat-label>Salary min ($)</mat-label>
+      <input matInput formControlName="salaryMin" type="number" placeholder="80000" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Salary max ($)</mat-label>
+      <input matInput formControlName="salaryMax" type="number" placeholder="120000" />
+    </mat-form-field>
+
+    <!-- Source -->
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Found via</mat-label>
+      <input matInput formControlName="source" placeholder="e.g. LinkedIn, Referral, Company site" />
+    </mat-form-field>
+
+    <!-- Applied date — Material datepicker -->
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Applied date</mat-label>
+      <input matInput [matDatepicker]="datePicker" formControlName="appliedDate"
+             placeholder="MM/DD/YYYY" />
+      <mat-datepicker-toggle matIconSuffix [for]="datePicker" />
+      <mat-datepicker #datePicker />
+    </mat-form-field>
+
+    @if (error()) {
+      <p class="error-msg span-2">{{ error() }}</p>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="loading()">
+    @if (loading()) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ isEdit ? 'Save changes' : 'Add application' }}
+    }
+  </button>
+</mat-dialog-actions>
