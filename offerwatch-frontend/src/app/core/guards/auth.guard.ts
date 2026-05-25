@@ -4,6 +4,11 @@ import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
-  if (auth.isLoggedIn()) return true;
+
+  // Token exists AND hasn't expired → allow navigation
+  if (auth.isLoggedIn() && !auth.isTokenExpired()) return true;
+
+  // Otherwise wipe the stale localStorage entry and redirect to login
+  auth.clearSession();
   return inject(Router).createUrlTree(['/login']);
 };

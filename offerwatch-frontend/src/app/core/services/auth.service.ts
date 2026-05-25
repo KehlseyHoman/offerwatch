@@ -17,6 +17,25 @@ export class AuthService {
   readonly currentUser = computed(() => this._authResponse());
   readonly token       = computed(() => this._authResponse()?.token ?? null);
 
+  /** Decode the JWT exp claim and check if it has passed. */
+  isTokenExpired(): boolean {
+    const t = this.token();
+    if (!t) return true;
+    try {
+      const payload = JSON.parse(atob(t.split('.')[1]));
+      return Date.now() >= payload.exp * 1000;   // exp is in seconds
+    } catch {
+      return true;   // malformed token → treat as expired
+    }
+  }
+
+  /** Clear session data without navigating — used by the auth guard. */
+  clearSession(): void {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    this._authResponse.set(null);
+  }
+
   constructor(private http: HttpClient, private router: Router) {}
 
   register(req: RegisterRequest): Observable<AuthResponse> {
