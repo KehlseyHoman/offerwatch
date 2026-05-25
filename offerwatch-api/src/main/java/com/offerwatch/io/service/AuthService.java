@@ -1,6 +1,5 @@
 package com.offerwatch.io.service;
 
-import com.offerwatch.io.dto.AuthResponse;
 import com.offerwatch.io.dto.LoginRequest;
 import com.offerwatch.io.dto.RegisterRequest;
 import com.offerwatch.io.entity.User;
@@ -13,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -22,10 +23,16 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Internal result — contains the raw JWT so the controller can set it
+     * as an httpOnly cookie.  The token is never sent to the client in a body.
+     */
+    public record AuthResult(String token, long expiresAt, UUID userId, String email, String name) {}
+
     // ── Register ──────────────────────────────────────────────────────────────
 
     @Transactional
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResult register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyUsedException("Email already registered: " + request.email());
         }
@@ -37,23 +44,27 @@ public class AuthService {
                 .build();
 
         user = userRepository.save(user);
-
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail());
-        return new AuthResponse(token, user.getId(), user.getEmail(), user.getName());
+        return buildResult(user);
     }
 
     // ── Login ─────────────────────────────────────────────────────────────────
 
-    public AuthResponse login(LoginRequest request) {
-        // Throws BadCredentialsException if email/password don't match
+    public AuthResult login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new IllegalStateException("User vanished after auth"));
 
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail());
-        return new AuthResponse(token, user.getId(), user.getEmail(), user.getName());
+        return buildResult(user);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private AuthResult buildResult(User user) {
+        long expiresAt = System.currentTimeMillis() + jwtUtil.getExpirationMs();
+        String token   = jwtUtil.generateToken(user.getId(), user.getEmail());
+        return new AuthResult(token, expiresAt, user.getId(), user.getEmail(), user.getName());
     }
 
     // ── Custom exception ──────────────────────────────────────────────────────

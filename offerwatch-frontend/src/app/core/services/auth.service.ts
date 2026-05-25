@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
 
-const TOKEN_KEY  = 'ow_token';
-const USER_KEY   = 'ow_user';
+const USER_KEY = 'ow_user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -15,48 +14,47 @@ export class AuthService {
 
   readonly isLoggedIn  = computed(() => this._authResponse() !== null);
   readonly currentUser = computed(() => this._authResponse());
-  readonly token       = computed(() => this._authResponse()?.token ?? null);
-
-  /** Decode the JWT exp claim and check if it has passed. */
-  isTokenExpired(): boolean {
-    const t = this.token();
-    if (!t) return true;
-    try {
-      const payload = JSON.parse(atob(t.split('.')[1]));
-      return Date.now() >= payload.exp * 1000;   // exp is in seconds
-    } catch {
-      return true;   // malformed token → treat as expired
-    }
-  }
-
-  /** Clear session data without navigating — used by the auth guard. */
-  clearSession(): void {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    this._authResponse.set(null);
-  }
 
   constructor(private http: HttpClient, private router: Router) {}
 
   register(req: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, req)
+    return this.http
+      .post<AuthResponse>(`${environment.apiUrl}/auth/register`, req, { withCredentials: true })
       .pipe(tap(res => this.persist(res)));
   }
 
   login(req: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, req)
+    return this.http
+      .post<AuthResponse>(`${environment.apiUrl}/auth/login`, req, { withCredentials: true })
       .pipe(tap(res => this.persist(res)));
   }
 
   logout(): void {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    this._authResponse.set(null);
+    // Tell the server to clear the httpOnly cookie (best-effort; clear locally regardless)
+    this.http
+      .post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true })
+      .subscribe();
+    this.clearSession();
     this.router.navigate(['/login']);
   }
 
+  /**
+   * Check expiry using the timestamp stored alongside the user info.
+   * No JWT decoding needed — the server told us when it expires at login time.
+   */
+  isTokenExpired(): boolean {
+    const user = this._authResponse();
+    if (!user) return true;
+    return Date.now() >= user.expiresAt;
+  }
+
+  /** Wipe localStorage + in-memory state without navigating (used by auth guard). */
+  clearSession(): void {
+    localStorage.removeItem(USER_KEY);
+    this._authResponse.set(null);
+  }
+
   private persist(res: AuthResponse): void {
-    localStorage.setItem(TOKEN_KEY, res.token);
     localStorage.setItem(USER_KEY, JSON.stringify(res));
     this._authResponse.set(res);
   }

@@ -66,6 +66,8 @@ public class JwtUtil {
         }
     }
 
+    public long getExpirationMs() { return expirationMs; }
+
     // ── Internals ─────────────────────────────────────────────────────────────
 
     private Claims parseClaims(String token) {

@@ -4,23 +4,21 @@ import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 /**
- * Two responsibilities:
- *  1. Attach the JWT Bearer token to every outgoing request.
- *  2. Catch 401 responses (expired / invalid token) and auto-logout so the
- *     user is immediately sent to the login page instead of seeing API errors.
+ * Attaches credentials (the httpOnly JWT cookie) to every request so the
+ * browser sends it automatically, and catches 401 responses to auto-logout.
+ *
+ * withCredentials: true  → browser includes cookies on cross-origin requests
+ *   (same-origin via the dev proxy, or production domain when deployed)
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const auth  = inject(AuthService);
-  const token = auth.token();
+  const auth = inject(AuthService);
 
-  const authedReq = token
-    ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
-    : req;
+  const credReq = req.clone({ withCredentials: true });
 
-  return next(authedReq).pipe(
+  return next(credReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      if (err.status === 401) {
-        // Token was rejected by the server — clear session and redirect
+      // Don't handle 401 on auth endpoints — avoids potential logout loops
+      if (err.status === 401 && !req.url.includes('/auth/')) {
         auth.logout();
       }
       return throwError(() => err);

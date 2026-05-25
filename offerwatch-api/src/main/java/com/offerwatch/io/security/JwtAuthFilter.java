@@ -2,6 +2,7 @@ package com.offerwatch.io.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +14,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Intercepts every request, looks for a Bearer token in the Authorization header,
- * validates it via {@link JwtUtil}, and sets the authenticated principal in the
- * {@link SecurityContextHolder} so downstream code can call
- * {@code authentication.getName()} to get the userId.
+ * Reads the JWT from the httpOnly "jwt" cookie (set by AuthController on login/register).
+ * The token is never exposed to JavaScript — the browser manages the cookie invisibly.
  *
- * Requests without a valid token pass through unauthenticated — Spring Security
- * then rejects them if the route requires authentication.
+ * Requests without a valid cookie pass through unauthenticated; Spring Security
+ * then rejects them with 401 if the route requires authentication.
  */
 @Component
 @RequiredArgsConstructor
@@ -37,32 +37,34 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        String token = extractFromCookie(request);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (token == null || !jwtUtil.isValid(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(7); // strip "Bearer "
-
-        if (!jwtUtil.isValid(token)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // Token is valid — build an authenticated principal from it (no DB call needed)
         UUID userId = jwtUtil.extractUserId(token);
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
-                        userId.toString(),   // principal  → controllers call auth.getName()
-                        null,                // credentials (not needed after token validation)
-                        List.of()            // authorities (roles — extend when needed)
+                        userId.toString(),
+                        null,
+                        List.of()
                 );
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
+    }
+
+    private String extractFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        return Arrays.stream(cookies)
+                .filter(c -> "jwt".equals(c.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
     }
 }
