@@ -1,0 +1,124 @@
+<!-- ═══════════════════════════  NAV  ═══════════════════════════ -->
+<nav class="landing-nav">
+  <a class="nav-logo" routerLink="/">
+    <span class="logo-mark">OW</span>
+    Offerwatch
+  </a>
+  <div class="nav-actions">
+    <a mat-button routerLink="/login">Sign in</a>
+    <a mat-flat-button routerLink="/register" class="nav-cta">Get started free</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════  HERO  ══════════════════════════ -->
+<section class="hero">
+  <div class="hero-badge">
+    <mat-icon>trending_up</mat-icon>
+    Built for engineers in an active job search
+  </div>
+
+  <h1 class="hero-headline">
+    Stop losing track of<br>
+    <span class="gradient-text">where things stand.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Offerwatch is the job-search command center you wished existed.
+    Track every application, prep smarter, spot patterns, and walk into
+    every interview knowing exactly where you stand.
+  </p>
+
+  <div class="hero-actions">
+    <a mat-flat-button routerLink="/register" class="hero-cta">
+      Start tracking for free
+      <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+    </a>
+    <a mat-stroked-button routerLink="/login" class="hero-login">
+      Sign in
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-number">6</span>
+      <span class="stat-label">Pipeline stages</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <span class="stat-number">50+</span>
+      <span class="stat-label">Interview questions</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <span class="stat-number">∞</span>
+      <span class="stat-label">STAR stories</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  FEATURES  ══════════════════════ -->
+<section class="features">
+  <div class="section-header">
+    <h2>Everything you need in one place</h2>
+    <p>No more spreadsheets, lost threads, or forgotten follow-ups.</p>
+  </div>
+
+  <div class="features-grid">
+    @for (f of features; track f.title) {
+      <div class="feature-card" [style.--accent]="f.color" [style.--accent-bg]="f.bg">
+        <div class="feature-icon">
+          <mat-icon>{{ f.icon }}</mat-icon>
+        </div>
+        <h3>{{ f.title }}</h3>
+        <p>{{ f.desc }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ═══════════════════════════  HOW IT WORKS  ══════════════════ -->
+<section class="how-it-works">
+  <div class="section-header light">
+    <h2>Up and running in minutes</h2>
+    <p>Four steps between now and a cleaner job search.</p>
+  </div>
+
+  <div class="steps">
+    @for (step of steps; track step.number) {
+      <div class="step">
+        <div class="step-number">{{ step.number }}</div>
+        <div class="step-content">
+          <h3>{{ step.label }}</h3>
+          <p>{{ step.sub }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ═══════════════════════════  CTA BANNER  ════════════════════ -->
+<section class="cta-banner">
+  <div class="cta-inner">
+    <h2>Your next offer is out there.</h2>
+    <p>Start tracking so you're ready when it arrives.</p>
+    <a mat-flat-button routerLink="/register" class="cta-banner-btn">
+      Create your free account
+      <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  FOOTER  ════════════════════════ -->
+<footer class="landing-footer">
+  <div class="footer-inner">
+    <a class="footer-logo" routerLink="/">
+      <span class="logo-mark footer-logo-mark">OW</span>
+      Offerwatch
+    </a>
+    <p class="footer-copy">© 2026 Offerwatch. Built for engineers, by an engineer.</p>
+    <div class="footer-links">
+      <a routerLink="/login">Sign in</a>
+      <a routerLink="/register">Register</a>
+    </div>
+  </div>
+</footer>

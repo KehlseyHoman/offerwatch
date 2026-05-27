@@ -1,0 +1,455 @@
+// ─── Design tokens ──────────────────────────────────────────────────────────
+$indigo:   #6366f1;
+$sky:      #0ea5e9;
+$emerald:  #10b981;
+$amber:    #f59e0b;
+$rose:     #f43f5e;
+$violet:   #8b5cf6;
+
+$dark:     #0f172a;
+$dark-mid: #1e293b;
+$muted:    #64748b;
+$border:   #e2e8f0;
+$surface:  #f8fafc;
+
+// ─── Global reset for the landing page ──────────────────────────────────────
+:host {
+  display: block;
+  background: #fff;
+  font-family: 'Roboto', sans-serif;
+  color: $dark;
+}
+
+// ─── Logo mark (shared by nav + footer) ─────────────────────────────────────
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, $indigo, $sky);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.footer-logo-mark {
+  // Slightly smaller in the footer
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+}
+
+// ─── Nav ─────────────────────────────────────────────────────────────────────
+.landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1rem, 5vw, 4rem);
+  height: 64px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid $border;
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $indigo;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-cta {
+    background: $indigo !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+  }
+}
+
+// ─── Hero ────────────────────────────────────────────────────────────────────
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(4rem, 10vw, 8rem) clamp(1rem, 5vw, 4rem) clamp(3rem, 8vw, 6rem);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 40%, rgba(14, 165, 233, 0.1) 0%, transparent 60%),
+    #fff;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: #eef2ff;
+  color: $indigo;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  // Use px so line-height matches exactly — prevents glyph clipping
+  mat-icon { font-size: 16px; width: 16px; height: 16px; line-height: 16px; }
+}
+
+.hero-headline {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: $dark;
+  margin: 0 0 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, $indigo 0%, $sky 50%, $emerald 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: $muted;
+  max-width: 560px;
+  line-height: 1.7;
+  margin: 0 0 2.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.hero-cta {
+  background: linear-gradient(135deg, $indigo, $sky) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 0 28px !important;
+  height: 48px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.35) !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.45) !important;
+  }
+}
+
+.hero-login {
+  border-radius: 10px !important;
+  height: 48px !important;
+  padding: 0 28px !important;
+  font-size: 1rem !important;
+  color: $muted !important;
+  border-color: $border !important;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+
+  @media (max-width: 480px) { gap: 1rem; }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, $indigo, $sky);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: $muted;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+}
+
+.stat-divider {
+  width: 1px;
+  height: 36px;
+  background: $border;
+}
+
+// ─── Features ────────────────────────────────────────────────────────────────
+.features {
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
+  background: $surface;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+
+  h2 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $dark;
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: $muted;
+    margin: 0;
+  }
+
+  &.light {
+    h2 { color: #fff; }
+    p  { color: rgba(255,255,255,0.7); }
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 2rem 2.25rem; // extra bottom so descenders breathe
+  border: 1px solid $border;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .feature-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--accent-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+
+    // Use px for all three — keeps line-height aligned with font-size so
+    // the icon glyph isn't clipped at the top/bottom by its own box.
+    mat-icon {
+      color: var(--accent);
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+    }
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4; // prevents ascender/descender clipping on bold text
+    color: $dark;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $muted;
+    line-height: 1.7;
+    margin: 0;
+  }
+}
+
+// ─── How It Works ────────────────────────────────────────────────────────────
+.how-it-works {
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
+  background: linear-gradient(135deg, $dark 0%, $dark-mid 100%);
+}
+
+.steps {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex: 1;
+  min-width: 200px;
+  max-width: 240px;
+
+  .step-number {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, $indigo, $sky);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 0.35rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+      margin: 0;
+      line-height: 1.55;
+    }
+  }
+}
+
+// ─── CTA Banner ──────────────────────────────────────────────────────────────
+.cta-banner {
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 50%, rgba(99,102,241,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 50%, rgba(14,165,233,0.2) 0%, transparent 60%),
+    #fff;
+}
+
+.cta-inner {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $dark;
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: $muted;
+    margin: 0 0 2rem;
+  }
+}
+
+.cta-banner-btn {
+  background: linear-gradient(135deg, $indigo, $sky) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 0 32px !important;
+  height: 52px !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.35) !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.45) !important;
+  }
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+.landing-footer {
+  padding: 2rem clamp(1rem, 5vw, 4rem);
+  background: $dark;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.footer-copy {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+
+  a {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover { color: #fff; }
+  }
+}
+
+// ─── Responsive tweaks ───────────────────────────────────────────────────────
+@media (max-width: 600px) {
+  .hero-stats { gap: 0.75rem; }
+  .steps { flex-direction: column; align-items: flex-start; padding: 0 1rem; }
+  .step { max-width: 100%; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
