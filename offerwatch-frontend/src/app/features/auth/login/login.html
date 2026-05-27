@@ -1,12 +1,12 @@
 <div class="auth-container">
   <mat-card class="auth-card">
-    <mat-card-header>
-      <div class="logo">
-        <span class="logo-text">Offerwatch</span>
-      </div>
-      <mat-card-title>Welcome back</mat-card-title>
-      <mat-card-subtitle>Sign in to track your applications</mat-card-subtitle>
-    </mat-card-header>
+    <div class="auth-header">
+      <img src="assets/logo-transparent.png"
+           alt="Offerwatch"
+           class="auth-logo" />
+      <h2 class="auth-title">Welcome back</h2>
+      <p class="auth-subtitle">Sign in to track your applications</p>
+    </div>
 
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="submit()">

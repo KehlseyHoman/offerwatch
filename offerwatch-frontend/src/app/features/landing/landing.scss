@@ -1,13 +1,18 @@
-// ─── Design tokens ──────────────────────────────────────────────────────────
-$indigo:   #6366f1;
-$sky:      #0ea5e9;
+// ─── Brand tokens (mirror :root in styles.scss) ──────────────────────────────
+$navy:        #0d1b2a;
+$navy-mid:    #1a3050;
+$navy-light:  #1e3a5f;
+$teal:        #00c8c8;
+$teal-light:  #1de9b6;
+
+// ─── Supporting palette ───────────────────────────────────────────────────────
 $emerald:  #10b981;
 $amber:    #f59e0b;
 $rose:     #f43f5e;
-$violet:   #8b5cf6;
+$violet:   #7c3aed;
 
-$dark:     #0f172a;
-$dark-mid: #1e293b;
+$dark:     $navy;
+$dark-mid: $navy-mid;
 $muted:    #64748b;
 $border:   #e2e8f0;
 $surface:  #f8fafc;
@@ -20,29 +25,41 @@ $surface:  #f8fafc;
   color: $dark;
 }
 
-// ─── Logo mark (shared by nav + footer) ─────────────────────────────────────
-.logo-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, $indigo, $sky);
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
+// ─── Logo images ─────────────────────────────────────────────────────────────
+// Nav: logo-transparent.png — dark navy+teal logo on transparent bg.
+//      Works perfectly on the white nav (dark on white = visible, no filter).
+//
+// Footer: logo-navy-small.png — self-contained dark navy background.
+//      No filter needed; the rounded-square badge style looks clean on the
+//      dark footer.
+
+.nav-logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
   flex-shrink: 0;
-  line-height: 1;
 }
 
-.footer-logo-mark {
-  // Slightly smaller in the footer
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  font-size: 0.65rem;
+.nav-brand {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: $navy;
+}
+
+.footer-logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+  // Subtle teal glow so the circuit-board accent traces read on the dark footer
+  filter: drop-shadow(0 0 6px rgba(0, 200, 200, 0.45));
+}
+
+.footer-brand {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
 }
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
@@ -63,11 +80,8 @@ $surface:  #f8fafc;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: $indigo;
     text-decoration: none;
-    letter-spacing: -0.01em;
+    color: $navy;
   }
 
   .nav-actions {
@@ -77,7 +91,7 @@ $surface:  #f8fafc;
   }
 
   .nav-cta {
-    background: $indigo !important;
+    background: $teal !important;
     color: #fff !important;
     border-radius: 8px !important;
   }
@@ -89,10 +103,12 @@ $surface:  #f8fafc;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: clamp(4rem, 10vw, 8rem) clamp(1rem, 5vw, 4rem) clamp(3rem, 8vw, 6rem);
+  // Compact vertical padding so the full hero (badge → headline → sub →
+  // CTAs → stats) fits in a typical 900–1080px laptop viewport.
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 40%, rgba(14, 165, 233, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0, 200, 200, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 40%, rgba(29, 233, 182, 0.08) 0%, transparent 60%),
     #fff;
 }
 
@@ -102,40 +118,39 @@ $surface:  #f8fafc;
   gap: 6px;
   padding: 6px 14px;
   border-radius: 100px;
-  background: #eef2ff;
-  color: $indigo;
+  background: rgba(0, 200, 200, 0.1);
+  color: $teal;
   font-size: 0.82rem;
   font-weight: 600;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 
-  // Use px so line-height matches exactly — prevents glyph clipping
   mat-icon { font-size: 16px; width: 16px; height: 16px; line-height: 16px; }
 }
 
 .hero-headline {
-  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.14;
   letter-spacing: -0.03em;
   color: $dark;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1rem;
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, $indigo 0%, $sky 50%, $emerald 100%);
+  background: linear-gradient(135deg, $teal 0%, $teal-light 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .hero-sub {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   color: $muted;
   max-width: 560px;
-  line-height: 1.7;
-  margin: 0 0 2.5rem;
+  line-height: 1.65;
+  margin: 0 0 1.5rem;
 }
 
 .hero-actions {
@@ -144,23 +159,23 @@ $surface:  #f8fafc;
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .hero-cta {
-  background: linear-gradient(135deg, $indigo, $sky) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, $teal, $teal-light) !important;
+  color: $navy !important;
   border-radius: 10px !important;
   padding: 0 28px !important;
   height: 48px !important;
   font-size: 1rem !important;
-  font-weight: 600 !important;
-  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.35) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 24px rgba(0, 200, 200, 0.35) !important;
   transition: transform 0.15s, box-shadow 0.15s !important;
 
   &:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.45) !important;
+    box-shadow: 0 8px 32px rgba(0, 200, 200, 0.45) !important;
   }
 }
 
@@ -188,10 +203,15 @@ $surface:  #f8fafc;
   align-items: center;
 
   .stat-number {
+    // display:block + explicit line-height + padding-bottom prevent the
+    // background-clip:text technique from clipping glyph descenders.
+    display: block;
     font-size: 2rem;
     font-weight: 800;
+    line-height: 1.2;
     letter-spacing: -0.04em;
-    background: linear-gradient(135deg, $indigo, $sky);
+    padding-bottom: 4px;
+    background: linear-gradient(135deg, $teal, $teal-light);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -254,7 +274,7 @@ $surface:  #f8fafc;
 .feature-card {
   background: #fff;
   border-radius: 16px;
-  padding: 2rem 2rem 2.25rem; // extra bottom so descenders breathe
+  padding: 2rem 2rem 2.25rem;
   border: 1px solid $border;
   transition: transform 0.2s, box-shadow 0.2s;
 
@@ -273,8 +293,6 @@ $surface:  #f8fafc;
     justify-content: center;
     margin-bottom: 1.25rem;
 
-    // Use px for all three — keeps line-height aligned with font-size so
-    // the icon glyph isn't clipped at the top/bottom by its own box.
     mat-icon {
       color: var(--accent);
       font-size: 26px;
@@ -287,7 +305,7 @@ $surface:  #f8fafc;
   h3 {
     font-size: 1rem;
     font-weight: 700;
-    line-height: 1.4; // prevents ascender/descender clipping on bold text
+    line-height: 1.4;
     color: $dark;
     margin: 0 0 0.5rem;
   }
@@ -303,7 +321,7 @@ $surface:  #f8fafc;
 // ─── How It Works ────────────────────────────────────────────────────────────
 .how-it-works {
   padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
-  background: linear-gradient(135deg, $dark 0%, $dark-mid 100%);
+  background: linear-gradient(135deg, $navy 0%, $navy-mid 100%);
 }
 
 .steps {
@@ -328,7 +346,7 @@ $surface:  #f8fafc;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.04em;
-    background: linear-gradient(135deg, $indigo, $sky);
+    background: linear-gradient(135deg, $teal, $teal-light);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -356,8 +374,8 @@ $surface:  #f8fafc;
 .cta-banner {
   padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
   background:
-    radial-gradient(ellipse 70% 60% at 30% 50%, rgba(99,102,241,0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 60% at 80% 50%, rgba(14,165,233,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 30% 50%, rgba(0,200,200,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 50%, rgba(29,233,182,0.1) 0%, transparent 60%),
     #fff;
 }
 
@@ -382,26 +400,26 @@ $surface:  #f8fafc;
 }
 
 .cta-banner-btn {
-  background: linear-gradient(135deg, $indigo, $sky) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, $teal, $teal-light) !important;
+  color: $navy !important;
   border-radius: 10px !important;
   padding: 0 32px !important;
   height: 52px !important;
   font-size: 1.05rem !important;
-  font-weight: 600 !important;
-  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.35) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 24px rgba(0, 200, 200, 0.35) !important;
   transition: transform 0.15s, box-shadow 0.15s !important;
 
   &:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.45) !important;
+    box-shadow: 0 8px 32px rgba(0, 200, 200, 0.45) !important;
   }
 }
 
 // ─── Footer ──────────────────────────────────────────────────────────────────
 .landing-footer {
   padding: 2rem clamp(1rem, 5vw, 4rem);
-  background: $dark;
+  background: $navy;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -418,10 +436,7 @@ $surface:  #f8fafc;
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #fff;
+  gap: 10px;
   text-decoration: none;
   opacity: 0.9;
 }
