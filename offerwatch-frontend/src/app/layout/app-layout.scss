@@ -3,20 +3,42 @@
   position: sticky;
   top: 0;
   z-index: 200;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+  background: var(--ow-navy) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   gap: 4px;
 }
 
+// ── Logo area ─────────────────────────────────────────────────────────────
 .logo-link {
   text-decoration: none;
-  color: inherit;
   margin-right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.85; }
 }
 
-.logo-text {
-  font-weight: 700;
+// logo-monogram-transparent.png has dark navy+teal on transparent.
+// A teal drop-shadow makes the circuit traces glow against the dark toolbar.
+.toolbar-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+  // Invert the dark-on-transparent logo so it reads as white on the navy toolbar,
+  // then add a teal glow so the circuit traces still feel on-brand.
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 200, 200, 0.55));
+}
+
+.toolbar-brand {
   font-size: 18px;
-  letter-spacing: -0.5px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: #fff;
+  white-space: nowrap;
 }
 
 // ── Nav links ─────────────────────────────────────────────────────────────
@@ -31,8 +53,8 @@
     gap: 6px;
     font-size: 14px;
     border-radius: 8px;
-    opacity: .72;
-    transition: opacity .15s;
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: color 0.15s, background 0.15s;
 
     mat-icon {
       font-size: 18px;
@@ -40,24 +62,29 @@
       height: 18px;
     }
 
-    &:hover { opacity: 1; }
+    &:hover {
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
 
     &.nav-active {
-      opacity: 1;
+      color: var(--ow-teal) !important;
       font-weight: 600;
-      background: rgba(0, 0, 0, .06);
+      background: rgba(0, 200, 200, 0.12) !important;
     }
   }
 }
 
 // Hide text labels on small screens, keep icons
 @media (max-width: 680px) {
-  .nav-label { display: none; }
-  .logo-link  { margin-right: 4px; }
+  .nav-label        { display: none; }
+  .logo-link        { margin-right: 4px; gap: 6px; }
+  .toolbar-brand    { font-size: 15px; }
 }
 
 @media (max-width: 440px) {
-  .logo-text { font-size: 15px; }
+  .toolbar-logo     { height: 32px; width: 32px; }
+  .toolbar-brand    { display: none; }
 }
 
 // ── Right side ────────────────────────────────────────────────────────────
@@ -65,8 +92,15 @@
 
 .user-name {
   font-size: 13px;
-  opacity: .7;
+  color: rgba(255, 255, 255, 0.65);
   margin-right: 2px;
 
   @media (max-width: 540px) { display: none; }
+}
+
+// Ensure icon buttons in the toolbar are white
+.toolbar button[mat-icon-button] {
+  color: rgba(255, 255, 255, 0.8) !important;
+
+  &:hover { color: #fff !important; }
 }

@@ -1,32 +1,64 @@
+// ─── Page wrapper ─────────────────────────────────────────────────────────────
 .auth-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--mat-sys-surface-container-lowest);
-  padding: 16px;
+  // Subtle teal glow at the top, matching the brand gradient on the landing page
+  background:
+    radial-gradient(ellipse 90% 40% at 50% 0%, rgba(0, 200, 200, 0.09) 0%, transparent 60%),
+    #f0f4f8;
+  padding: 24px 16px;
 }
 
+// ─── Card ─────────────────────────────────────────────────────────────────────
 .auth-card {
   width: 100%;
-  max-width: 420px;
-  padding: 8px;
-
-  mat-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 8px;
-  }
+  max-width: 440px;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12) !important;
 }
 
-.logo {
-  margin-bottom: 16px;
-  .logo-text {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--mat-sys-primary);
-    letter-spacing: -0.5px;
-  }
+// ─── Header block ─────────────────────────────────────────────────────────────
+// Light background so the dark navy+teal logo-transparent.png is clearly
+// visible instead of blending into a dark surface.
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 2rem 1.25rem;
+  text-align: center;
+  background: linear-gradient(160deg, #f0fafa 0%, #e6f7f7 100%);
+  border-bottom: 1px solid rgba(0, 200, 200, 0.2);
+}
+
+.auth-logo {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  margin-bottom: 0.9rem;
+  // Soft teal glow to lift the logo off the light background
+  filter: drop-shadow(0 4px 14px rgba(0, 200, 200, 0.3));
+}
+
+.auth-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0d1b2a;
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.3px;
+}
+
+.auth-subtitle {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0;
+}
+
+// ─── Form body ────────────────────────────────────────────────────────────────
+mat-card-content {
+  padding: 1.5rem 1.75rem 0.5rem !important;
 }
 
 .full-width {
@@ -35,7 +67,10 @@
 
 .submit-btn {
   margin-top: 8px;
-  height: 44px;
+  height: 46px;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em;
 }
 
 .error-msg {
@@ -44,9 +79,22 @@
   margin: 4px 0 8px;
 }
 
+// ─── Footer link ──────────────────────────────────────────────────────────────
+mat-card-actions {
+  padding: 0.5rem 1.75rem 1.25rem !important;
+}
+
 .switch-link {
   text-align: center;
   font-size: 14px;
   color: var(--mat-sys-on-surface-variant);
-  a { color: var(--mat-sys-primary); text-decoration: none; font-weight: 500; }
+  margin: 0;
+
+  a {
+    color: var(--mat-sys-primary);
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover { text-decoration: underline; }
+  }
 }

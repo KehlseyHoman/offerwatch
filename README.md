@@ -227,6 +227,21 @@ All secrets are read from environment variables — nothing is hardcoded. See [`
 
 ---
 
+## Branching Strategy
+
+| Branch | Purpose |
+|---|---|
+| `main` | Production-ready. Protected — no direct pushes. Merge via PR from `dev`. |
+| `dev` | Active development. Default branch for all feature work. |
+
+```
+feature/xyz  →  dev  →  (PR)  →  main
+```
+
+All day-to-day work branches off `dev`. When `dev` is stable and tested, open a pull request into `main` to cut a release.
+
+---
+
 ## Roadmap
 
 - [ ] Deploy API to Railway / Render

@@ -3,6 +3,19 @@ import { authGuard } from './core/guards/auth.guard';
 import { AppLayoutComponent } from './layout/app-layout';
 
 export const routes: Routes = [
+  // ── Landing page (public) ────────────────────────────────────────────────
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./features/landing/landing').then(m => m.LandingComponent),
+  },
+
+  // ── Features / product tour (public) ────────────────────────────────────
+  {
+    path: 'features',
+    loadComponent: () => import('./features/features-page/features-page').then(m => m.FeaturesPageComponent),
+  },
+
   // ── Public auth routes (no layout) ──────────────────────────────────────
   {
     path: 'login',
@@ -50,5 +63,5 @@ export const routes: Routes = [
   },
 
   // ── Fallback ─────────────────────────────────────────────────────────────
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: '' },
 ];

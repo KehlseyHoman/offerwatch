@@ -1,0 +1,410 @@
+<!-- ═══════════════════════════  NAV  ═══════════════════════════ -->
+<nav class="landing-nav">
+  <a class="nav-logo" routerLink="/">
+    <img src="assets/logo-monogram-transparent.png" alt="Offerwatch logo" class="nav-logo-img" />
+    <span class="nav-brand">Offerwatch</span>
+  </a>
+  <div class="nav-links">
+    <a routerLink="/features" class="nav-link active">Features</a>
+  </div>
+  <div class="nav-actions">
+    <a mat-button routerLink="/login">Sign in</a>
+    <a mat-flat-button routerLink="/register" class="nav-cta">Get started free</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════  HERO  ══════════════════════════ -->
+<section class="page-hero">
+  <div class="hero-badge">
+    <mat-icon>visibility</mat-icon>
+    Product overview
+  </div>
+  <h1>See Offerwatch in action</h1>
+  <p>Every tool you need to run a focused, organized job search — built specifically for engineers.</p>
+  <a mat-flat-button routerLink="/register" class="hero-cta">
+    Start for free
+    <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+  </a>
+</section>
+
+<!-- ═══════════════════════════  FEATURE 1: Dashboard  ══════════ -->
+<section class="tour-section">
+  <div class="tour-text">
+    <div class="tour-badge" style="--c:#6366f1;--bg:#eef2ff">
+      <mat-icon>table_chart</mat-icon> Pipeline Dashboard
+    </div>
+    <h2>Your entire pipeline, one scroll away</h2>
+    <p>See every application you're tracking in a sortable, filterable table. Update status with a single click — no page reload, no friction.</p>
+    <ul class="tour-bullets">
+      <li><mat-icon>check_circle</mat-icon> 6 pipeline stages: Saved → Applied → Phone Screen → Interview → Offer → Rejected</li>
+      <li><mat-icon>check_circle</mat-icon> Inline status changes via dropdown — updates save instantly</li>
+      <li><mat-icon>check_circle</mat-icon> Staleness indicator shows time since last activity</li>
+      <li><mat-icon>check_circle</mat-icon> Salary range, location, applied date, and job link all in one row</li>
+      <li><mat-icon>check_circle</mat-icon> Summary metrics bar at the top — Total, Applied, Interviews, Offers</li>
+    </ul>
+  </div>
+
+  <div class="tour-visual">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        </div>
+        <div class="browser-url">offerwatch.io/dashboard</div>
+      </div>
+      <div class="mockup-dashboard">
+        <div class="mock-header">
+          <span class="mock-page-title">My Applications</span>
+          <span class="mock-btn">+ Add application</span>
+        </div>
+        <div class="mock-metrics">
+          <div class="mock-metric"><span class="mm-val">14</span><span class="mm-lbl">Total</span></div>
+          <div class="mock-metric-div"></div>
+          <div class="mock-metric"><span class="mm-val">5</span><span class="mm-lbl">Applied</span></div>
+          <div class="mock-metric-div"></div>
+          <div class="mock-metric"><span class="mm-val">4</span><span class="mm-lbl">Interviews</span></div>
+          <div class="mock-metric-div"></div>
+          <div class="mock-metric"><span class="mm-val">1</span><span class="mm-lbl">Offers</span></div>
+        </div>
+        <div class="mock-table">
+          <div class="mock-thead">
+            <span class="col-co">Company</span>
+            <span class="col-st">Status</span>
+            <span class="col-loc">Location</span>
+            <span class="col-sal">Salary</span>
+            <span class="col-dt">Applied</span>
+          </div>
+          <div class="mock-row">
+            <span class="col-co"><strong>Google</strong><em>SWE L5</em></span>
+            <span class="col-st"><span class="badge offer">Offer</span></span>
+            <span class="col-loc">Mountain View</span>
+            <span class="col-sal">$220–280k</span>
+            <span class="col-dt">Apr 1</span>
+          </div>
+          <div class="mock-row">
+            <span class="col-co"><strong>Stripe</strong><em>Backend Eng</em></span>
+            <span class="col-st"><span class="badge interview">Interview</span></span>
+            <span class="col-loc">Remote</span>
+            <span class="col-sal">$200–240k</span>
+            <span class="col-dt">Apr 8</span>
+          </div>
+          <div class="mock-row">
+            <span class="col-co"><strong>Meta</strong><em>SWE E5</em></span>
+            <span class="col-st"><span class="badge interview">Interview</span></span>
+            <span class="col-loc">Menlo Park</span>
+            <span class="col-sal">$210–260k</span>
+            <span class="col-dt">Apr 10</span>
+          </div>
+          <div class="mock-row">
+            <span class="col-co"><strong>Netflix</strong><em>Senior SWE</em></span>
+            <span class="col-st"><span class="badge phone_screen">Ph. Screen</span></span>
+            <span class="col-loc">Los Gatos</span>
+            <span class="col-sal">$300–350k</span>
+            <span class="col-dt">Apr 12</span>
+          </div>
+          <div class="mock-row">
+            <span class="col-co"><strong>Shopify</strong><em>Backend Eng</em></span>
+            <span class="col-st"><span class="badge applied">Applied</span></span>
+            <span class="col-loc">Remote</span>
+            <span class="col-sal">$170–210k</span>
+            <span class="col-dt">May 1</span>
+          </div>
+          <div class="mock-row faded">
+            <span class="col-co"><strong>Anthropic</strong><em>Software Eng</em></span>
+            <span class="col-st"><span class="badge saved">Saved</span></span>
+            <span class="col-loc">San Francisco</span>
+            <span class="col-sal">$200–280k</span>
+            <span class="col-dt">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  FEATURE 2: Analytics  ══════════ -->
+<div class="alt-bg-wrapper">
+<section class="tour-section reverse">
+  <div class="tour-text">
+    <div class="tour-badge" style="--c:#0ea5e9;--bg:#e0f2fe">
+      <mat-icon>analytics</mat-icon> Smart Analytics
+    </div>
+    <h2>Spot patterns before they cost you an offer</h2>
+    <p>Know your response rate, where you're getting ghosted, which sources are working, and how your pipeline is converting — all computed live from your data.</p>
+    <ul class="tour-bullets">
+      <li><mat-icon>check_circle</mat-icon> Conversion funnel from Applied → Phone Screen → Interview → Offer</li>
+      <li><mat-icon>check_circle</mat-icon> Response rate and ghosting detection (30+ days no activity)</li>
+      <li><mat-icon>check_circle</mat-icon> Applications by source — see which channels actually convert</li>
+      <li><mat-icon>check_circle</mat-icon> Weekly and monthly application velocity tracking</li>
+      <li><mat-icon>check_circle</mat-icon> Awaiting response alerts for companies you haven't heard from in 14+ days</li>
+    </ul>
+  </div>
+
+  <div class="tour-visual">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        </div>
+        <div class="browser-url">offerwatch.io/stats</div>
+      </div>
+      <div class="mockup-stats">
+        <div class="mock-stat-cards">
+          <div class="mock-stat-card total"><span class="msc-val">14</span><span class="msc-lbl">Total Applications</span></div>
+          <div class="mock-stat-card active"><span class="msc-val">10</span><span class="msc-lbl">Active in Pipeline</span></div>
+          <div class="mock-stat-card interviews"><span class="msc-val">4</span><span class="msc-lbl">In Interviews</span></div>
+          <div class="mock-stat-card response"><span class="msc-val">71%</span><span class="msc-lbl">Response Rate</span></div>
+        </div>
+        <div class="mock-funnel-section">
+          <div class="mock-section-title">Interview Pipeline</div>
+          <div class="mock-funnel">
+            <div class="funnel-row">
+              <span class="fl">Applied</span>
+              <div class="fb-wrap"><div class="fb applied" style="width:100%"></div></div>
+              <span class="fc">14</span>
+            </div>
+            <div class="funnel-row">
+              <span class="fl">Phone Screen</span>
+              <div class="fb-wrap"><div class="fb phone_screen" style="width:57%"></div></div>
+              <span class="fc">8 <em>57%</em></span>
+            </div>
+            <div class="funnel-row">
+              <span class="fl">Interview</span>
+              <div class="fb-wrap"><div class="fb interview" style="width:29%"></div></div>
+              <span class="fc">4 <em>50%</em></span>
+            </div>
+            <div class="funnel-row">
+              <span class="fl">Offer</span>
+              <div class="fb-wrap"><div class="fb offer" style="width:7%"></div></div>
+              <span class="fc">1 <em>25%</em></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ═══════════════════════════  FEATURE 3: Application Detail  ══ -->
+<section class="tour-section">
+  <div class="tour-text">
+    <div class="tour-badge" style="--c:#ec4899;--bg:#fce7f3">
+      <mat-icon>contact_page</mat-icon> Application Detail
+    </div>
+    <h2>Everything about one application, in one place</h2>
+    <p>Each application has its own detail view — log notes, track contacts, set follow-up due dates, and store the job description and resume version you used.</p>
+    <ul class="tour-bullets">
+      <li><mat-icon>check_circle</mat-icon> Notes tab — running log of every interaction, formatted with timestamps</li>
+      <li><mat-icon>check_circle</mat-icon> Contacts — recruiter, hiring manager, networking connection — with email, phone, LinkedIn</li>
+      <li><mat-icon>check_circle</mat-icon> Follow-ups with due dates and completion tracking</li>
+      <li><mat-icon>check_circle</mat-icon> Store salary range, location, job URL, resume version, cover letter notes</li>
+    </ul>
+  </div>
+
+  <div class="tour-visual">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        </div>
+        <div class="browser-url">offerwatch.io/applications/…</div>
+      </div>
+      <div class="mockup-detail">
+        <div class="mock-detail-header">
+          <div class="mock-detail-co">
+            <span class="mock-co-name">Stripe</span>
+            <span class="mock-co-role">Backend Engineer</span>
+          </div>
+          <span class="badge interview">Interview</span>
+        </div>
+        <div class="mock-detail-meta">
+          <span><mat-icon>location_on</mat-icon> Remote</span>
+          <span><mat-icon>attach_money</mat-icon> $200–240k</span>
+          <span><mat-icon>calendar_today</mat-icon> Applied Apr 8</span>
+        </div>
+        <div class="mock-tabs">
+          <span class="mock-tab active">Notes</span>
+          <span class="mock-tab">Contacts</span>
+          <span class="mock-tab">Follow-ups</span>
+        </div>
+        <div class="mock-notes">
+          <div class="mock-note">
+            <span class="note-date">May 3, 2026</span>
+            <p>System design round went well — designed a rate limiter with token bucket. Coding round had one hard Leetcode (sliding window). Waiting on debrief.</p>
+          </div>
+          <div class="mock-note">
+            <span class="note-date">Apr 22, 2026</span>
+            <p>Phone screen with James (recruiter) — 20 min. Confirmed team is payments infra. Loop scheduled for next week, 5 rounds total.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  FEATURE 4: Interview Prep  ═════ -->
+<div class="alt-bg-wrapper">
+<section class="tour-section reverse">
+  <div class="tour-text">
+    <div class="tour-badge" style="--c:#10b981;--bg:#d1fae5">
+      <mat-icon>psychology</mat-icon> Interview Prep
+    </div>
+    <h2>50+ curated questions, your own answers</h2>
+    <p>A structured library of questions organized by category — behavioral, system design, coding, role-specific. Write your answers and notes directly in the app so they're always one click away.</p>
+    <ul class="tour-bullets">
+      <li><mat-icon>check_circle</mat-icon> Questions organized by category: Behavioral, System Design, Coding, Leadership, and more</li>
+      <li><mat-icon>check_circle</mat-icon> Write and save your personal notes/answers per question</li>
+      <li><mat-icon>check_circle</mat-icon> Add your own custom questions for company-specific prep</li>
+      <li><mat-icon>check_circle</mat-icon> All notes saved instantly — accessible on any device</li>
+    </ul>
+  </div>
+
+  <div class="tour-visual">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        </div>
+        <div class="browser-url">offerwatch.io/interview-prep</div>
+      </div>
+      <div class="mockup-prep">
+        <div class="mock-header">
+          <span class="mock-page-title">Interview Prep</span>
+        </div>
+        <div class="mock-prep-list">
+          <div class="mock-prep-item expanded">
+            <div class="prep-item-header">
+              <span class="prep-category system-design">System Design</span>
+              <span class="prep-question">Design a URL shortener (like bit.ly)</span>
+            </div>
+            <div class="prep-notes">
+              Key components: hash function, Redis for hot URLs, Cassandra for persistence. Handle collisions with retry + counter. Scale: 100M URLs/day = ~1200 writes/sec, 10B reads/day = ~115k reads/sec.
+            </div>
+          </div>
+          <div class="mock-prep-item">
+            <div class="prep-item-header">
+              <span class="prep-category system-design">System Design</span>
+              <span class="prep-question">Design a rate limiter</span>
+            </div>
+          </div>
+          <div class="mock-prep-item">
+            <div class="prep-item-header">
+              <span class="prep-category behavioral">Behavioral</span>
+              <span class="prep-question">Tell me about yourself</span>
+            </div>
+          </div>
+          <div class="mock-prep-item">
+            <div class="prep-item-header">
+              <span class="prep-category coding">Coding</span>
+              <span class="prep-question">Two Sum variations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ═══════════════════════════  FEATURE 5: STAR Stories  ═══════ -->
+<section class="tour-section">
+  <div class="tour-text">
+    <div class="tour-badge" style="--c:#f59e0b;--bg:#fef3c7">
+      <mat-icon>auto_stories</mat-icon> STAR Stories
+    </div>
+    <h2>Write your behavioral stories once, reuse them everywhere</h2>
+    <p>Structure your best work experiences in Situation / Task / Action / Result format, tag them by theme, and note which questions they answer — so you're never scrambling before an interview.</p>
+    <ul class="tour-bullets">
+      <li><mat-icon>check_circle</mat-icon> Guided STAR format — Situation, Task, Action, Result</li>
+      <li><mat-icon>check_circle</mat-icon> Tag stories by theme: Leadership, Conflict, Ownership, Failure, Teamwork, and more</li>
+      <li><mat-icon>check_circle</mat-icon> Note which question variants each story can answer</li>
+      <li><mat-icon>check_circle</mat-icon> Build a library you can review the night before any interview</li>
+    </ul>
+  </div>
+
+  <div class="tour-visual">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        </div>
+        <div class="browser-url">offerwatch.io/behavioral-stories</div>
+      </div>
+      <div class="mockup-stories">
+        <div class="mock-header">
+          <span class="mock-page-title">STAR Stories</span>
+          <span class="mock-btn">+ New story</span>
+        </div>
+        <div class="mock-story-card">
+          <div class="story-card-header">
+            <span class="story-theme leadership">Leadership</span>
+            <span class="story-title">Led incident response during 3AM production outage</span>
+          </div>
+          <div class="story-sections">
+            <div class="story-section">
+              <span class="ss-label">S</span>
+              <p>Critical payment processing service went down at 3AM affecting ~40k users.</p>
+            </div>
+            <div class="story-section">
+              <span class="ss-label">T</span>
+              <p>Coordinate cross-functional response across 4 teams under pressure.</p>
+            </div>
+            <div class="story-section">
+              <span class="ss-label">A</span>
+              <p>Created war room, assigned roles, ran 15-min check-ins. Root cause: DB connection pool exhaustion. Rolled back in 20 min.</p>
+            </div>
+            <div class="story-section">
+              <span class="ss-label">R</span>
+              <p>Restored service in 22 minutes. Post-mortem led to new alerting runbook.</p>
+            </div>
+          </div>
+          <div class="story-tags">
+            <span class="story-tag">Tell me about a time you led under pressure</span>
+            <span class="story-tag">How do you handle incidents</span>
+          </div>
+        </div>
+        <div class="mock-story-summary">
+          <div class="story-summary-row">
+            <span class="story-theme conflict">Conflict</span>
+            <span>Disagreed with tech lead on architecture decision</span>
+          </div>
+          <div class="story-summary-row">
+            <span class="story-theme ownership">Ownership</span>
+            <span>Inherited broken legacy service and turned it around</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  CTA  ═══════════════════════════ -->
+<section class="cta-banner">
+  <div class="cta-inner">
+    <h2>Ready to take control of your search?</h2>
+    <p>Free to start. No credit card required. Get up and running in minutes.</p>
+    <a mat-flat-button routerLink="/register" class="cta-btn">
+      Create your free account
+      <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  FOOTER  ════════════════════════ -->
+<footer class="landing-footer">
+  <div class="footer-inner">
+    <a class="footer-logo" routerLink="/">
+      <img src="assets/logo-monogram-transparent.png" alt="Offerwatch logo" class="footer-logo-img" />
+      <span class="footer-brand">Offerwatch</span>
+    </a>
+    <p class="footer-copy">© 2026 Offerwatch. Built for engineers, by an engineer.</p>
+    <div class="footer-links">
+      <a routerLink="/">Home</a>
+      <a routerLink="/login">Sign in</a>
+      <a routerLink="/register">Register</a>
+    </div>
+  </div>
+</footer>
