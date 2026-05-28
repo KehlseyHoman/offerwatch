@@ -28,7 +28,9 @@
   width: auto;
   display: block;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 6px rgba(0, 200, 200, 0.4));
+  // Invert the dark-on-transparent logo so it reads as white on the navy toolbar,
+  // then add a teal glow so the circuit traces still feel on-brand.
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 200, 200, 0.55));
 }
 
 .toolbar-brand {

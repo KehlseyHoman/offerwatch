@@ -226,17 +226,17 @@
 
 // ── Story detail (expanded view) ──────────────────────────────────────────
 .story-detail {
-  padding: 0 20px 20px;
+  padding: 16px 20px 20px;
   border-top: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
 }
 
 .edit-section {
-  padding: 0 20px 20px;
+  padding: 20px 20px 20px;
   border-top: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
 }
 
 .view-grid {
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .star-section { display: flex; flex-direction: column; margin-bottom: 8px; }

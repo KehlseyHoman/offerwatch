@@ -84,6 +84,19 @@ $surface:  #f8fafc;
     color: $navy;
   }
 
+  .nav-links {
+    display: flex;
+    align-items: center;
+
+    .nav-features-link {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: $muted !important;
+      transition: color 0.15s;
+      &:hover { color: $navy !important; }
+    }
+  }
+
   .nav-actions {
     display: flex;
     align-items: center;
@@ -315,6 +328,35 @@ $surface:  #f8fafc;
     color: $muted;
     line-height: 1.7;
     margin: 0;
+  }
+}
+
+// ─── Features more link ───────────────────────────────────────────────────────
+.features-more {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2rem, 4vw, 3rem);
+
+  .features-more-link {
+    border-radius: 10px !important;
+    border-color: $border !important;
+    color: $navy !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    gap: 6px !important;
+    transition: border-color 0.15s, box-shadow 0.15s !important;
+
+    &:hover {
+      border-color: $teal !important;
+      box-shadow: 0 0 0 3px rgba(0, 200, 200, 0.12) !important;
+    }
+
+    mat-icon {
+      font-size: 18px !important;
+      width: 18px !important;
+      height: 18px !important;
+      line-height: 18px !important;
+    }
   }
 }
 

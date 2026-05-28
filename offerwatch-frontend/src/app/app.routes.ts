@@ -10,6 +10,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/landing/landing').then(m => m.LandingComponent),
   },
 
+  // ── Features / product tour (public) ────────────────────────────────────
+  {
+    path: 'features',
+    loadComponent: () => import('./features/features-page/features-page').then(m => m.FeaturesPageComponent),
+  },
+
   // ── Public auth routes (no layout) ──────────────────────────────────────
   {
     path: 'login',

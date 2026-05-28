@@ -6,6 +6,9 @@
          class="nav-logo-img" />
     <span class="nav-brand">Offerwatch</span>
   </a>
+  <div class="nav-links">
+    <a mat-button routerLink="/features" class="nav-features-link">Features</a>
+  </div>
   <div class="nav-actions">
     <a mat-button routerLink="/login">Sign in</a>
     <a mat-flat-button routerLink="/register" class="nav-cta">Get started free</a>
@@ -75,6 +78,14 @@
         <p>{{ f.desc }}</p>
       </div>
     }
+  </div>
+
+  <div class="features-more">
+    <a mat-stroked-button routerLink="/features" class="features-more-link">
+      <mat-icon>visibility</mat-icon>
+      See the full product tour
+      <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+    </a>
   </div>
 </section>
 
