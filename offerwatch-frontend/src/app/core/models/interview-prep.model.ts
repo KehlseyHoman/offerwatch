@@ -44,7 +44,7 @@ export const SUGGESTED_QUESTIONS: { category: string; questions: string[] }[] = 
       'How do you handle technical debt in a codebase?',
       'Tell me about a time you had to make a significant architectural decision.',
       'How do you stay current with new technologies and industry trends?',
-      'Describe your experience with code reviews — giving and receiving feedback.',
+      'Describe your experience with code reviews: giving and receiving feedback.',
       'How do you approach testing your code?',
     ],
   },

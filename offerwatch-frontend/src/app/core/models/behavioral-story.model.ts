@@ -29,10 +29,10 @@ export type StoryTheme = typeof STORY_THEMES[number];
 /** Tip text shown per theme to help the user remember what to write. */
 export const THEME_TIPS: Record<string, string> = {
   Leadership:       'Leading a team, initiative, influencing without authority.',
-  Failure:          'A mistake or failure — focus on what you learned and changed.',
+  Failure:          'A mistake or failure. Focus on what you learned and changed.',
   Teamwork:         'Collaborating across teams or disciplines to achieve a shared goal.',
   Conflict:         'Navigating disagreement with a colleague, manager, or stakeholder.',
-  Achievement:      'A project or result you are proud of — quantify the impact.',
+  Achievement:      'A project or result you are proud of. Quantify the impact.',
   Growth:           'A skill you developed quickly or a mindset shift you made.',
   Communication:    'Conveying complex info clearly, persuasion, stakeholder alignment.',
   'Problem-Solving':'Diagnosing a tricky problem and engineering or designing a solution.',

@@ -9,7 +9,7 @@
   </div>
   <div class="nav-actions">
     <a mat-button routerLink="/login">Sign in</a>
-    <a mat-flat-button routerLink="/register" class="nav-cta">Get started free</a>
+    <span class="nav-coming-soon">Coming soon</span>
   </div>
 </nav>
 
@@ -20,11 +20,11 @@
     Product overview
   </div>
   <h1>See Offerwatch in action</h1>
-  <p>Every tool you need to run a focused, organized job search — built specifically for engineers.</p>
-  <a mat-flat-button routerLink="/register" class="hero-cta">
-    Start for free
-    <mat-icon iconPositionEnd>arrow_forward</mat-icon>
-  </a>
+  <p>Every tool you need to run a focused, organized job search, built specifically for engineers.</p>
+  <span class="coming-soon-cta">
+    <mat-icon>schedule</mat-icon>
+    Coming soon
+  </span>
 </section>
 
 <!-- ═══════════════════════════  FEATURE 1: Dashboard  ══════════ -->
@@ -34,13 +34,13 @@
       <mat-icon>table_chart</mat-icon> Pipeline Dashboard
     </div>
     <h2>Your entire pipeline, one scroll away</h2>
-    <p>See every application you're tracking in a sortable, filterable table. Update status with a single click — no page reload, no friction.</p>
+    <p>See every application you're tracking in a sortable, filterable table. Update status with a single click with no page reload or friction.</p>
     <ul class="tour-bullets">
       <li><mat-icon>check_circle</mat-icon> 6 pipeline stages: Saved → Applied → Phone Screen → Interview → Offer → Rejected</li>
-      <li><mat-icon>check_circle</mat-icon> Inline status changes via dropdown — updates save instantly</li>
+      <li><mat-icon>check_circle</mat-icon> Inline status changes via dropdown; updates save instantly</li>
       <li><mat-icon>check_circle</mat-icon> Staleness indicator shows time since last activity</li>
       <li><mat-icon>check_circle</mat-icon> Salary range, location, applied date, and job link all in one row</li>
-      <li><mat-icon>check_circle</mat-icon> Summary metrics bar at the top — Total, Applied, Interviews, Offers</li>
+      <li><mat-icon>check_circle</mat-icon> Summary metrics bar at the top: Total, Applied, Interviews, Offers</li>
     </ul>
   </div>
 
@@ -114,7 +114,7 @@
             <span class="col-st"><span class="badge saved">Saved</span></span>
             <span class="col-loc">San Francisco</span>
             <span class="col-sal">$200–280k</span>
-            <span class="col-dt">—</span>
+            <span class="col-dt">-</span>
           </div>
         </div>
       </div>
@@ -130,11 +130,11 @@
       <mat-icon>analytics</mat-icon> Smart Analytics
     </div>
     <h2>Spot patterns before they cost you an offer</h2>
-    <p>Know your response rate, where you're getting ghosted, which sources are working, and how your pipeline is converting — all computed live from your data.</p>
+    <p>Know your response rate, where you're getting ghosted, which sources are working, and how your pipeline is converting, all computed live from your data.</p>
     <ul class="tour-bullets">
       <li><mat-icon>check_circle</mat-icon> Conversion funnel from Applied → Phone Screen → Interview → Offer</li>
       <li><mat-icon>check_circle</mat-icon> Response rate and ghosting detection (30+ days no activity)</li>
-      <li><mat-icon>check_circle</mat-icon> Applications by source — see which channels actually convert</li>
+      <li><mat-icon>check_circle</mat-icon> Applications by source: see which channels actually convert</li>
       <li><mat-icon>check_circle</mat-icon> Weekly and monthly application velocity tracking</li>
       <li><mat-icon>check_circle</mat-icon> Awaiting response alerts for companies you haven't heard from in 14+ days</li>
     </ul>
@@ -194,10 +194,10 @@
       <mat-icon>contact_page</mat-icon> Application Detail
     </div>
     <h2>Everything about one application, in one place</h2>
-    <p>Each application has its own detail view — log notes, track contacts, set follow-up due dates, and store the job description and resume version you used.</p>
+    <p>Each application has its own detail view: log notes, track contacts, set follow-up due dates, and store the job description and resume version you used.</p>
     <ul class="tour-bullets">
-      <li><mat-icon>check_circle</mat-icon> Notes tab — running log of every interaction, formatted with timestamps</li>
-      <li><mat-icon>check_circle</mat-icon> Contacts — recruiter, hiring manager, networking connection — with email, phone, LinkedIn</li>
+      <li><mat-icon>check_circle</mat-icon> Notes tab: running log of every interaction, formatted with timestamps</li>
+      <li><mat-icon>check_circle</mat-icon> Contacts: recruiter, hiring manager, networking connection, with email, phone, LinkedIn</li>
       <li><mat-icon>check_circle</mat-icon> Follow-ups with due dates and completion tracking</li>
       <li><mat-icon>check_circle</mat-icon> Store salary range, location, job URL, resume version, cover letter notes</li>
     </ul>
@@ -232,11 +232,11 @@
         <div class="mock-notes">
           <div class="mock-note">
             <span class="note-date">May 3, 2026</span>
-            <p>System design round went well — designed a rate limiter with token bucket. Coding round had one hard Leetcode (sliding window). Waiting on debrief.</p>
+            <p>System design round went well; designed a rate limiter with token bucket. Coding round had one hard Leetcode (sliding window). Waiting on debrief.</p>
           </div>
           <div class="mock-note">
             <span class="note-date">Apr 22, 2026</span>
-            <p>Phone screen with James (recruiter) — 20 min. Confirmed team is payments infra. Loop scheduled for next week, 5 rounds total.</p>
+            <p>Phone screen with James (recruiter), 20 min. Confirmed team is payments infra. Loop scheduled for next week, 5 rounds total.</p>
           </div>
         </div>
       </div>
@@ -252,12 +252,12 @@
       <mat-icon>psychology</mat-icon> Interview Prep
     </div>
     <h2>50+ curated questions, your own answers</h2>
-    <p>A structured library of questions organized by category — behavioral, system design, coding, role-specific. Write your answers and notes directly in the app so they're always one click away.</p>
+    <p>A structured library of questions organized by category: behavioral, system design, coding, role-specific. Write your answers and notes directly in the app so they're always one click away.</p>
     <ul class="tour-bullets">
       <li><mat-icon>check_circle</mat-icon> Questions organized by category: Behavioral, System Design, Coding, Leadership, and more</li>
       <li><mat-icon>check_circle</mat-icon> Write and save your personal notes/answers per question</li>
       <li><mat-icon>check_circle</mat-icon> Add your own custom questions for company-specific prep</li>
-      <li><mat-icon>check_circle</mat-icon> All notes saved instantly — accessible on any device</li>
+      <li><mat-icon>check_circle</mat-icon> All notes saved instantly, accessible on any device</li>
     </ul>
   </div>
 
@@ -316,9 +316,9 @@
       <mat-icon>auto_stories</mat-icon> STAR Stories
     </div>
     <h2>Write your behavioral stories once, reuse them everywhere</h2>
-    <p>Structure your best work experiences in Situation / Task / Action / Result format, tag them by theme, and note which questions they answer — so you're never scrambling before an interview.</p>
+    <p>Structure your best work experiences in Situation / Task / Action / Result format, tag them by theme, and note which questions they answer so you're never scrambling before an interview.</p>
     <ul class="tour-bullets">
-      <li><mat-icon>check_circle</mat-icon> Guided STAR format — Situation, Task, Action, Result</li>
+      <li><mat-icon>check_circle</mat-icon> Guided STAR format: Situation, Task, Action, Result</li>
       <li><mat-icon>check_circle</mat-icon> Tag stories by theme: Leadership, Conflict, Ownership, Failure, Teamwork, and more</li>
       <li><mat-icon>check_circle</mat-icon> Note which question variants each story can answer</li>
       <li><mat-icon>check_circle</mat-icon> Build a library you can review the night before any interview</li>
@@ -386,10 +386,10 @@
   <div class="cta-inner">
     <h2>Ready to take control of your search?</h2>
     <p>Free to start. No credit card required. Get up and running in minutes.</p>
-    <a mat-flat-button routerLink="/register" class="cta-btn">
-      Create your free account
-      <mat-icon iconPositionEnd>arrow_forward</mat-icon>
-    </a>
+    <span class="coming-soon-cta">
+      <mat-icon>schedule</mat-icon>
+      Coming soon
+    </span>
   </div>
 </section>
 
@@ -404,7 +404,7 @@
     <div class="footer-links">
       <a routerLink="/">Home</a>
       <a routerLink="/login">Sign in</a>
-      <a routerLink="/register">Register</a>
+      <span class="nav-coming-soon">Coming soon</span>
     </div>
   </div>
 </footer>

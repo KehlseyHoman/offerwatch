@@ -4,11 +4,11 @@
 
 // ── Brand design tokens ──────────────────────────────────────────────────────
 // Derived from the Offerwatch logo color palette:
-//   Deep Navy   #0d1b2a  — primary background / dark surfaces
-//   Mid Navy    #1a3050  — secondary surfaces
-//   Teal Cyan   #00c8c8  — primary accent (circuit-board teal)
-//   Teal Light  #1de9b6  — gradient highlight / secondary accent
-//   White       #ffffff  — text / logo on dark backgrounds
+//   Deep Navy   #0d1b2a  - primary background / dark surfaces
+//   Mid Navy    #1a3050  - secondary surfaces
+//   Teal Cyan   #00c8c8  - primary accent (circuit-board teal)
+//   Teal Light  #1de9b6  - gradient highlight / secondary accent
+//   White       #ffffff  - text / logo on dark backgrounds
 :root {
   --ow-navy:        #0d1b2a;
   --ow-navy-mid:    #1a3050;
@@ -46,3 +46,39 @@ body {
   min-height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+
+// ── Coming-soon state (pre-launch, remove once signups open) ─────────────────
+.nav-coming-soon {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: rgba(0, 200, 200, 0.1);
+  color: var(--ow-teal);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(0, 200, 200, 0.25);
+  white-space: nowrap;
+}
+
+.coming-soon-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 28px;
+  height: 48px;
+  background: rgba(0, 200, 200, 0.1);
+  color: var(--ow-teal);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 1.5px solid rgba(0, 200, 200, 0.3);
+  letter-spacing: 0.01em;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+}

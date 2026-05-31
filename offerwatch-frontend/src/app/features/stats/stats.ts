@@ -91,7 +91,7 @@ export class StatsComponent implements OnInit {
     return this._apps().filter(a => a.appliedDate && new Date(a.appliedDate).getTime() >= cutoff).length;
   });
 
-  /** Apps in applied/phone_screen with no update in >14 days — may be ghosting */
+  /** Apps in applied/phone_screen with no update in >14 days - may be ghosting */
   readonly awaitingResponse = computed(() =>
     this._apps().filter(a => {
       if (!['applied', 'phone_screen'].includes(a.status)) return false;
@@ -100,7 +100,7 @@ export class StatsComponent implements OnInit {
     }),
   );
 
-  /** Apps in applied with no update in >30 days — likely ghosted */
+  /** Apps in applied with no update in >30 days - likely ghosted */
   readonly ghosted = computed(() =>
     this._apps().filter(a => {
       if (a.status !== 'applied') return false;

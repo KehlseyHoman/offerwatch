@@ -24,14 +24,14 @@ export class LandingComponent implements OnInit {
     {
       icon: 'table_chart',
       title: 'Pipeline Dashboard',
-      desc: 'Track every application from Saved to Offer. Inline status updates, staleness indicators, and sortable columns — no clicking around.',
+      desc: 'Track every application from Saved to Offer. Inline status updates, staleness indicators, and sortable columns with no clicking around.',
       color: '#6366f1',
       bg: '#eef2ff',
     },
     {
       icon: 'analytics',
       title: 'Smart Analytics',
-      desc: 'Pipeline funnel with conversion rates, sources breakdown, response-rate trends, and ghosting detection — all computed live.',
+      desc: 'Pipeline funnel with conversion rates, sources breakdown, response-rate trends, and ghosting detection. All computed live.',
       color: '#0ea5e9',
       bg: '#e0f2fe',
     },

@@ -210,7 +210,7 @@
       </div>
 
       <div class="activity-item" [class.danger]="ghosted().length > 0"
-           [matTooltip]="ghosted().length > 0 ? 'Applications with no update in 30+ days — may be ghosted' : ''">
+           [matTooltip]="ghosted().length > 0 ? 'Applications with no update in 30+ days, may be ghosted' : ''">
         <span class="activity-value">{{ ghosted().length }}</span>
         <span class="activity-desc">possibly <strong>ghosted</strong> (&gt;30d)</span>
         <mat-icon class="activity-icon" [class.red]="ghosted().length > 0">ghost</mat-icon>

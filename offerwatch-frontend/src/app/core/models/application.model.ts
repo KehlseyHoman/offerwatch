@@ -41,7 +41,7 @@ export interface Application {
   source?: string;               // e.g. "LinkedIn", "Referral", "Company site"
   applicationQuestions?: string; // paste unusual questions from the application form
   resumeVersion?: string;        // e.g. "engineering-v3", "generic-2026"
-  coverLetterNotes?: string;     // e.g. "Custom — led with distributed systems" or "None"
+  coverLetterNotes?: string;     // e.g. "Custom - led with distributed systems" or "None"
   createdAt?: string;
   updatedAt?: string;
 }
