@@ -40,7 +40,7 @@ export class AuthService {
 
   /**
    * Check expiry using the timestamp stored alongside the user info.
-   * No JWT decoding needed — the server told us when it expires at login time.
+   * No JWT decoding needed - the server told us when it expires at login time.
    */
   isTokenExpired(): boolean {
     const user = this._authResponse();

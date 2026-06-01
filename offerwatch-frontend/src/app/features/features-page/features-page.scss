@@ -103,6 +103,7 @@ $surface:    #f8fafc;
 
   h1 {
     font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15;
     font-weight: 800;
     letter-spacing: -0.03em;
     margin: 0 0 1rem;
@@ -778,9 +779,15 @@ $surface:    #f8fafc;
 .cta-inner {
   max-width: 520px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 
   h2 {
+    width: 100%;
     font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.15;
     font-weight: 800;
     letter-spacing: -0.03em;
     color: $navy;
@@ -788,6 +795,7 @@ $surface:    #f8fafc;
   }
 
   p {
+    width: 100%;
     font-size: 1.05rem;
     color: $muted;
     margin: 0 0 2rem;

@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { this.load(); }
 
   ngAfterViewInit(): void {
-    // Set the accessor immediately — it doesn't need the MatSort instance.
+    // Set the accessor immediately - it doesn't need the MatSort instance.
     // We connect this.sort to the dataSource AFTER data loads (see load()) because
     // the table lives inside an @else block and won't be in the DOM until then.
     this.dataSource.sortingDataAccessor = (app, col) => {
@@ -178,7 +178,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   /** Returns a human-friendly relative time string, e.g. "Today", "3d ago", "2w ago". */
   relativeTime(dateStr: string | undefined): string {
-    if (!dateStr) return '—';
+    if (!dateStr) return '-';
     const diffMs   = Date.now() - new Date(dateStr).getTime();
     const diffDays = Math.floor(diffMs / 86_400_000);
     if (diffDays === 0) return 'Today';

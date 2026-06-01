@@ -17,7 +17,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(credReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      // Don't handle 401 on auth endpoints — avoids potential logout loops
+      // Don't handle 401 on auth endpoints - avoids potential logout loops
       if (err.status === 401 && !req.url.includes('/auth/')) {
         auth.logout();
       }

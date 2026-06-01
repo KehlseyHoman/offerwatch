@@ -76,7 +76,7 @@
             <div class="star-label a-label">A — Action</div>
             <mat-form-field appearance="outline" class="full">
               <textarea matInput formControlName="action" rows="4"
-                        placeholder="What did you do? Be specific — this is your biggest section."></textarea>
+                        placeholder="What did you do? Be specific. This is your biggest section."></textarea>
             </mat-form-field>
           </div>
           <div class="star-field">
@@ -92,7 +92,7 @@
           <mat-label>Applicable question variations</mat-label>
           <textarea matInput formControlName="applicableQuestions" rows="2"
                     placeholder="e.g. 'Tell me about a time you led a team', 'Describe leading without authority', 'How do you motivate people?'"></textarea>
-          <mat-hint>List question variations this story can answer — helps you quickly match it during prep</mat-hint>
+          <mat-hint>List question variations this story can answer (helps you quickly match it during prep)</mat-hint>
         </mat-form-field>
 
         <div class="form-actions">
@@ -114,7 +114,7 @@
         <p>Add a story above or change the theme filter.</p>
       } @else {
         <h2>No stories yet</h2>
-        <p>Add your first STAR story — you only need to write it once, then you can spin it for different questions.</p>
+        <p>Add your first STAR story. You only need to write it once, then you can spin it for different questions.</p>
         <button mat-flat-button color="primary" (click)="showAddForm.set(true)">
           <mat-icon>add</mat-icon> Add Story
         </button>
@@ -254,7 +254,7 @@
               } @else {
                 <p class="no-star-hint">
                   <mat-icon>info_outline</mat-icon>
-                  No STAR content yet — click edit to fill in your story.
+                  No STAR content yet. Click edit to fill in your story.
                 </p>
               }
 

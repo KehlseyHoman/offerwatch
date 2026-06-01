@@ -1,4 +1,4 @@
-// Register uses the exact same layout as Login — all styles live in login.scss.
+// Register uses the exact same layout as Login - all styles live in login.scss.
 // Angular scopes component styles, so we re-declare the shared classes here
 // using @use so they apply to this component's host tree.
 @use '../login/login';
