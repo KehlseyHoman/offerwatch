@@ -1,6 +1,2 @@
-[build]
-buildCommand = "npm run build"
-
 [deploy]
-startCommand = "npx serve browser -s -p $PORT"
 healthcheckPath = "/"
