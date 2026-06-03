@@ -2,4 +2,5 @@
 buildCommand = "npm run build"
 
 [deploy]
-startCommand = "node_modules/.bin/serve browser -s -l $PORT"
+startCommand = "npx serve browser -s -p $PORT"
+healthcheckPath = "/"

@@ -106,18 +106,19 @@
     position: sticky;
     left: 0;
     z-index: 2;
+  }
+
+  // All data cells get the same explicit background so the sticky company column
+  // doesn't appear as a different shade from the rest of the row
+  .mat-mdc-cell {
+    white-space: nowrap;
     background: var(--mat-sys-surface-container-lowest, #fff);
   }
 
-  .mat-mdc-cell { white-space: nowrap; }
-
   .app-row {
     transition: background .12s;
-    &:hover {
+    &:hover .mat-mdc-cell {
       background: var(--mat-sys-surface-container-low, #f5f5f5);
-      .col-company.mat-mdc-cell {
-        background: var(--mat-sys-surface-container-low, #f5f5f5);
-      }
     }
     &:last-child td { border-bottom: none; }
   }
