@@ -179,8 +179,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   /** Returns a human-friendly relative time string, e.g. "Today", "3d ago", "2w ago". */
   relativeTime(dateStr: string | undefined): string {
     if (!dateStr) return '-';
-    const diffMs   = Date.now() - new Date(dateStr).getTime();
-    const diffDays = Math.floor(diffMs / 86_400_000);
+    const now  = new Date();
+    const date = new Date(dateStr);
+    // Compare calendar dates (midnight-to-midnight) so "Today" is accurate regardless of time of day
+    const todayMidnight = new Date(now.getFullYear(),  now.getMonth(),  now.getDate());
+    const dateMidnight  = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((todayMidnight.getTime() - dateMidnight.getTime()) / 86_400_000);
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     if (diffDays <   7) return `${diffDays}d ago`;
@@ -192,7 +196,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   /** CSS class for the activity badge based on how stale the application is. */
   activityClass(dateStr: string | undefined): string {
     if (!dateStr) return '';
-    const diffDays = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86_400_000);
+    const now  = new Date();
+    const date = new Date(dateStr);
+    const todayMidnight = new Date(now.getFullYear(),  now.getMonth(),  now.getDate());
+    const dateMidnight  = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((todayMidnight.getTime() - dateMidnight.getTime()) / 86_400_000);
     if (diffDays <= 3)  return 'activity-fresh';
     if (diffDays <= 14) return 'activity-recent';
     if (diffDays <= 30) return 'activity-stale';
