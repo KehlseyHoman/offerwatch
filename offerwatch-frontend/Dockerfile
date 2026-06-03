@@ -9,4 +9,6 @@ FROM node:20-alpine
 WORKDIR /app
 RUN npm install -g serve@14
 COPY --from=builder /app/browser ./browser
+RUN chown -R node:node /app
+USER node
 CMD ["sh", "-c", "serve browser -s -p ${PORT:-3000}"]
