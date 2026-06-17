@@ -5,10 +5,9 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine
-WORKDIR /app
-RUN npm install -g serve@14
-COPY --from=builder /app/browser ./browser
-RUN chown -R node:node /app
-USER node
-CMD ["sh", "-c", "serve browser -s -p ${PORT:-3000}"]
+FROM nginx:alpine
+COPY --from=builder /app/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+ENV PORT=8080
+EXPOSE 8080
+CMD ["/bin/sh", "-c", "envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
