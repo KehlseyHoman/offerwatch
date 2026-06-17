@@ -24,7 +24,6 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
-        working-directory: offerwatch-api
         run: railway up --service "${{ vars.RAILWAY_API_SERVICE || 'offerwatch-api' }}" --environment production
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_API }}
