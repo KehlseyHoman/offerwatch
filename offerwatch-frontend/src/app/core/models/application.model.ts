@@ -2,30 +2,38 @@ export type ApplicationStatus =
   | 'saved'
   | 'applied'
   | 'phone_screen'
-  | 'interview'
+  | 'technical_interview'
+  | 'final_round'
   | 'offer'
   | 'rejected';
 
 export const APPLICATION_STATUSES: ApplicationStatus[] = [
-  'saved', 'applied', 'phone_screen', 'interview', 'offer', 'rejected'
+  'saved', 'applied', 'phone_screen', 'technical_interview', 'final_round', 'offer', 'rejected'
+];
+
+/** Forward pipeline order — rejected is terminal and excluded. */
+export const STAGE_ORDER: ApplicationStatus[] = [
+  'saved', 'applied', 'phone_screen', 'technical_interview', 'final_round', 'offer'
 ];
 
 export const STATUS_LABELS: Record<ApplicationStatus, string> = {
-  saved:        'Saved',
-  applied:      'Applied',
-  phone_screen: 'Phone Screen',
-  interview:    'Interview',
-  offer:        'Offer',
-  rejected:     'Rejected'
+  saved:               'Saved',
+  applied:             'Applied',
+  phone_screen:        'Phone Screen',
+  technical_interview: 'Technical Interview',
+  final_round:         'Final Round',
+  offer:               'Offer',
+  rejected:            'Rejected'
 };
 
 export const STATUS_COLORS: Record<ApplicationStatus, string> = {
-  saved:        'default',
-  applied:      'primary',
-  phone_screen: 'accent',
-  interview:    'accent',
-  offer:        'primary',   // will be overridden with green in CSS
-  rejected:     'warn'
+  saved:               'default',
+  applied:             'primary',
+  phone_screen:        'accent',
+  technical_interview: 'accent',
+  final_round:         'accent',
+  offer:               'primary',
+  rejected:            'warn'
 };
 
 export interface Application {
@@ -33,6 +41,8 @@ export interface Application {
   company: string;
   roleTitle?: string;
   status: ApplicationStatus;
+  /** Furthest pipeline stage reached — preserved when status moves to rejected. */
+  stageReached?: ApplicationStatus;
   location?: string;
   jobUrl?: string;
   salaryMin?: number;

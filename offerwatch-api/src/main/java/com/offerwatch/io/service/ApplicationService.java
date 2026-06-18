@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static com.offerwatch.io.entity.ApplicationStatus.*;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,6 +22,10 @@ public class ApplicationService {
 
     /** Free-tier cap: max active (non-rejected) applications. */
     private static final long FREE_TIER_LIMIT = 10;
+
+    /** Forward pipeline order — rejected is terminal and excluded. */
+    private static final List<ApplicationStatus> STAGE_ORDER = List.of(
+            saved, applied, phone_screen, technical_interview, final_round, offer);
 
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
@@ -54,6 +60,10 @@ public class ApplicationService {
         if (application.getStatus() == null) {
             application.setStatus(ApplicationStatus.saved);
         }
+        // Initialize stageReached to the starting status (if not rejected)
+        if (application.getStatus() != rejected) {
+            application.setStageReached(application.getStatus());
+        }
         return applicationRepository.save(application);
     }
 
@@ -65,7 +75,18 @@ public class ApplicationService {
 
         if (patch.getCompany() != null)     existing.setCompany(patch.getCompany());
         if (patch.getRoleTitle() != null)   existing.setRoleTitle(patch.getRoleTitle());
-        if (patch.getStatus() != null)      existing.setStatus(patch.getStatus());
+        if (patch.getStatus() != null) {
+            existing.setStatus(patch.getStatus());
+            // Advance stageReached if this status is further in the pipeline
+            if (patch.getStatus() != rejected) {
+                int newIdx      = STAGE_ORDER.indexOf(patch.getStatus());
+                int currentIdx  = existing.getStageReached() != null
+                        ? STAGE_ORDER.indexOf(existing.getStageReached()) : -1;
+                if (newIdx > currentIdx) {
+                    existing.setStageReached(patch.getStatus());
+                }
+            }
+        }
         if (patch.getLocation() != null)    existing.setLocation(patch.getLocation());
         if (patch.getJobUrl() != null)      existing.setJobUrl(patch.getJobUrl());
         if (patch.getSalaryMin() != null)   existing.setSalaryMin(patch.getSalaryMin());
