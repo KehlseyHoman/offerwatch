@@ -2,6 +2,8 @@
 
 A full-stack job application tracker built for software engineers actively in a job search. Track applications through the entire hiring pipeline, prep for interviews, and spot patterns in your search — all in one place.
 
+**Live app:** https://job-boards.greenhouse.io/calendly/jobs/8464846002?gh_src=ma4uqj152us
+
 ![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=flat-square&logo=angular)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0-6DB33F?style=flat-square&logo=spring)
 ![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=java)
@@ -13,7 +15,7 @@ A full-stack job application tracker built for software engineers actively in a 
 ## Features
 
 ### Application Pipeline
-- Track every application through **Saved → Applied → Phone Screen → Interview → Offer → Rejected**
+- Track every application through **Saved → Applied → Phone Screen → Technical Interview → Final Round → Offer → Rejected**
 - Inline status changes directly from the dashboard table — no page navigation needed
 - **Last activity** column with color-coded staleness indicators (fresh / recent / stale / ghosted)
 - Sortable, sticky-header table with horizontal + vertical scrolling
@@ -118,7 +120,9 @@ create table applications (
   company               text not null,
   role_title            text,
   status                text not null default 'saved'
-                          check (status in ('saved','applied','phone_screen','interview','offer','rejected')),
+                          check (status in ('saved','applied','phone_screen','technical_interview','final_round','offer','rejected')),
+  stage_reached         text
+                          check (stage_reached in ('saved','applied','phone_screen','technical_interview','final_round','offer')),
   location              text,
   job_url               text,
   salary_min            integer,
@@ -185,6 +189,31 @@ create table behavioral_stories (
   created_at            timestamptz default now(),
   updated_at            timestamptz default now()
 );
+```
+
+#### Migrating an existing database
+
+If you already have an `applications` table, run this in Supabase SQL Editor:
+
+```sql
+-- 1. Drop old constraint
+alter table applications drop constraint applications_status_check;
+
+-- 2. Rename existing 'interview' rows BEFORE the new constraint is applied
+update applications set status = 'technical_interview' where status = 'interview';
+
+-- 3. Add new constraint
+alter table applications
+  add constraint applications_status_check
+  check (status in ('saved','applied','phone_screen','technical_interview','final_round','offer','rejected'));
+
+-- 4. Add stage_reached column (tracks furthest stage reached, even after rejection)
+alter table applications
+  add column if not exists stage_reached text
+    check (stage_reached in ('saved','applied','phone_screen','technical_interview','final_round','offer'));
+
+-- 5. Backfill stage_reached for existing rows
+update applications set stage_reached = status where status != 'rejected';
 ```
 
 ### 2. API

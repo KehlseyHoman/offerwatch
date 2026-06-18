@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   readonly statCounts = computed(() => {
     const counts: Record<ApplicationStatus, number> = {
       saved: 0, applied: 0, phone_screen: 0,
-      interview: 0, offer: 0, rejected: 0,
+      technical_interview: 0, final_round: 0, offer: 0, rejected: 0,
     };
     for (const app of this._apps()) counts[app.status]++;
     return counts;
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   readonly activeCount = computed(() => {
     const c = this.statCounts();
-    return c.applied + c.phone_screen + c.interview + c.offer;
+    return c.applied + c.phone_screen + c.technical_interview + c.final_round + c.offer;
   });
 
   // ── Table config ──────────────────────────────────────────────────────────
@@ -72,12 +72,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   readonly statusLabels = STATUS_LABELS;
 
   readonly metricRows: { key: ApplicationStatus; label: string }[] = [
-    { key: 'saved',        label: 'Saved'        },
-    { key: 'applied',      label: 'Applied'      },
-    { key: 'phone_screen', label: 'Phone Screen' },
-    { key: 'interview',    label: 'Interview'    },
-    { key: 'offer',        label: 'Offer'        },
-    { key: 'rejected',     label: 'Rejected'     },
+    { key: 'saved',               label: 'Saved'        },
+    { key: 'applied',             label: 'Applied'      },
+    { key: 'phone_screen',        label: 'Phone Screen' },
+    { key: 'technical_interview', label: 'Technical'    },
+    { key: 'final_round',         label: 'Final Round'  },
+    { key: 'offer',               label: 'Offer'        },
+    { key: 'rejected',            label: 'Rejected'     },
   ];
 
   constructor(

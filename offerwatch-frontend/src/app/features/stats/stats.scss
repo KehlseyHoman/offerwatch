@@ -121,10 +121,11 @@
   .funnel-rate     { font-size: 11px; font-weight: 400; opacity: .55; white-space: nowrap; }
 }
 
-.funnel-bar.applied      { background: #1565c0; }
-.funnel-bar.phone_screen { background: #6a1b9a; }
-.funnel-bar.interview    { background: #e65100; }
-.funnel-bar.offer        { background: #2e7d32; }
+.funnel-bar.applied             { background: #1565c0; }
+.funnel-bar.phone_screen        { background: #6a1b9a; }
+.funnel-bar.technical_interview { background: #e65100; }
+.funnel-bar.final_round         { background: #f57c00; }
+.funnel-bar.offer               { background: #2e7d32; }
 
 // ── Status distribution ───────────────────────────────────────────────────
 .status-rows { display: flex; flex-direction: column; gap: 8px; }

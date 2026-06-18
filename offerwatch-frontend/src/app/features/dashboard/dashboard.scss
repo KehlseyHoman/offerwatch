@@ -54,13 +54,14 @@
   .metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; opacity: .55; white-space: nowrap; }
 }
 
-.metric-total        { border-left: 3px solid #9e9e9e; }
-.metric-saved        { .metric-value { color: #555;    } }
-.metric-applied      { .metric-value { color: #1565c0; } }
-.metric-phone_screen { .metric-value { color: #6a1b9a; } }
-.metric-interview    { .metric-value { color: #e65100; } }
-.metric-offer        { .metric-value { color: #1b5e20; } }
-.metric-rejected     { .metric-value { color: #b71c1c; } }
+.metric-total               { border-left: 3px solid #9e9e9e; }
+.metric-saved               { .metric-value { color: #555;    } }
+.metric-applied             { .metric-value { color: #1565c0; } }
+.metric-phone_screen        { .metric-value { color: #6a1b9a; } }
+.metric-technical_interview { .metric-value { color: #e65100; } }
+.metric-final_round         { .metric-value { color: #f57c00; } }
+.metric-offer               { .metric-value { color: #1b5e20; } }
+.metric-rejected            { .metric-value { color: #b71c1c; } }
 
 // ── Table wrapper ─────────────────────────────────────────────────────────
 // The outer wrapper takes remaining vertical space and clips;
@@ -126,7 +127,7 @@
 
 // ── Column widths ─────────────────────────────────────────────────────────
 .col-company  { min-width: 200px; max-width: 280px; padding: 0 16px 0 16px; }
-.col-status   { min-width: 150px; padding: 0 12px; }
+.col-status   { min-width: 190px; padding: 0 12px; }
 .col-location { min-width: 120px; max-width: 180px; padding: 0 12px; }
 .col-salary   { min-width: 160px; padding: 0 12px; }
 .col-date     { min-width: 110px; padding: 0 12px; }
@@ -183,12 +184,13 @@
   .chevron-icon { font-size: 16px; width: 16px; height: 16px; opacity: .7; }
 }
 
-.status-saved        { color: #555 !important;    background: #eee !important;    }
-.status-applied      { color: #1565c0 !important; background: #e3f2fd !important; }
-.status-phone_screen { color: #6a1b9a !important; background: #f3e5f5 !important; }
-.status-interview    { color: #e65100 !important; background: #fff3e0 !important; }
-.status-offer        { color: #1b5e20 !important; background: #e8f5e9 !important; }
-.status-rejected     { color: #b71c1c !important; background: #ffebee !important; }
+.status-saved               { color: #555 !important;    background: #eee !important;    }
+.status-applied             { color: #1565c0 !important; background: #e3f2fd !important; }
+.status-phone_screen        { color: #6a1b9a !important; background: #f3e5f5 !important; }
+.status-technical_interview { color: #e65100 !important; background: #fff3e0 !important; }
+.status-final_round         { color: #f57c00 !important; background: #fff8e1 !important; }
+.status-offer               { color: #1b5e20 !important; background: #e8f5e9 !important; }
+.status-rejected            { color: #b71c1c !important; background: #ffebee !important; }
 
 // ── Status menu dots ──────────────────────────────────────────────────────
 .status-dot {
@@ -198,12 +200,13 @@
   margin-right: 8px;
   flex-shrink: 0;
 }
-.dot-saved        { background: #9e9e9e; }
-.dot-applied      { background: #1565c0; }
-.dot-phone_screen { background: #6a1b9a; }
-.dot-interview    { background: #e65100; }
-.dot-offer        { background: #2e7d32; }
-.dot-rejected     { background: #c62828; }
+.dot-saved               { background: #9e9e9e; }
+.dot-applied             { background: #1565c0; }
+.dot-phone_screen        { background: #6a1b9a; }
+.dot-technical_interview { background: #e65100; }
+.dot-final_round         { background: #f57c00; }
+.dot-offer               { background: #2e7d32; }
+.dot-rejected            { background: #c62828; }
 
 .check-icon { font-size: 16px !important; width: 16px !important; height: 16px !important; margin-left: auto; color: var(--mat-sys-primary); }
 

@@ -45,6 +45,11 @@ public class Application {
     @Builder.Default
     private ApplicationStatus status = ApplicationStatus.saved;
 
+    /** Furthest pipeline stage reached — preserved when status moves to rejected. */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "stage_reached")
+    private ApplicationStatus stageReached;
+
     @Column
     private String location;
 

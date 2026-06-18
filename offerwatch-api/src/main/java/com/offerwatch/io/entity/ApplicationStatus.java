@@ -9,7 +9,8 @@ public enum ApplicationStatus {
     saved,
     applied,
     phone_screen,
-    interview,
+    technical_interview,
+    final_round,
     offer,
     rejected
 }

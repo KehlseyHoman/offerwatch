@@ -5,7 +5,7 @@ import { MatIconModule }                        from '@angular/material/icon';
 import { MatTooltipModule }                     from '@angular/material/tooltip';
 import { MatDividerModule }                     from '@angular/material/divider';
 
-import { Application, ApplicationStatus } from '../../core/models/application.model';
+import { Application, ApplicationStatus, STAGE_ORDER } from '../../core/models/application.model';
 import { ApplicationService }              from '../../core/services/application.service';
 
 interface SourceCount { source: string; count: number; pct: number; }
@@ -26,44 +26,59 @@ export class StatsComponent implements OnInit {
   private _apps = signal<Application[]>([]);
 
   // ── Summary ───────────────────────────────────────────────────────────────
-  readonly total       = computed(() => this._apps().length);
-  readonly statCounts  = computed(() => {
+  readonly total      = computed(() => this._apps().length);
+  readonly statCounts = computed(() => {
     const c: Record<string, number> = {
-      saved: 0, applied: 0, phone_screen: 0, interview: 0, offer: 0, rejected: 0,
+      saved: 0, applied: 0, phone_screen: 0,
+      technical_interview: 0, final_round: 0, offer: 0, rejected: 0,
     };
     for (const a of this._apps()) c[a.status]++;
     return c;
   });
 
-  readonly activeCount  = computed(() => {
+  readonly activeCount = computed(() => {
     const c = this.statCounts();
-    return c['applied'] + c['phone_screen'] + c['interview'] + c['offer'];
+    return c['applied'] + c['phone_screen'] + c['technical_interview'] + c['final_round'] + c['offer'];
   });
 
   readonly responseRate = computed(() => {
     const total = this.total();
     if (total === 0) return 0;
     const c = this.statCounts();
-    return (c['phone_screen'] + c['interview'] + c['offer'] + c['rejected']) / total;
+    return (c['phone_screen'] + c['technical_interview'] + c['final_round'] + c['offer'] + c['rejected']) / total;
   });
 
   // ── Interview pipeline ────────────────────────────────────────────────────
+  // Uses stageReached (falling back to current status for non-rejected apps) so
+  // applications that were rejected mid-pipeline still count toward the stages they reached.
   readonly pipeline = computed(() => {
-    const c   = this.statCounts();
-    const tot = this.total();
-    if (tot === 0) return null;
-    const applied      = c['applied'] + c['phone_screen'] + c['interview'] + c['offer'] + c['rejected'];
-    const phoneScreen  = c['phone_screen'] + c['interview'] + c['offer'];
-    const interview    = c['interview'] + c['offer'];
-    const offer        = c['offer'];
+    const apps = this._apps();
+    if (apps.length === 0) return null;
+
+    const reached = (stage: ApplicationStatus): number => {
+      const minIdx = STAGE_ORDER.indexOf(stage);
+      return apps.filter(a => {
+        const s = a.stageReached ?? (a.status !== 'rejected' ? a.status : null);
+        return s != null && STAGE_ORDER.indexOf(s) >= minIdx;
+      }).length;
+    };
+
+    const applied      = reached('applied');
+    const phoneScreen  = reached('phone_screen');
+    const techInterview = reached('technical_interview');
+    const finalRound   = reached('final_round');
+    const offer        = reached('offer');
+
     return {
       applied,
       phoneScreen,
-      interview,
+      techInterview,
+      finalRound,
       offer,
-      ratePS:  applied     > 0 ? phoneScreen / applied    : 0,
-      rateInt: phoneScreen > 0 ? interview   / phoneScreen : 0,
-      rateOff: interview   > 0 ? offer       / interview   : 0,
+      ratePS:    applied       > 0 ? phoneScreen   / applied       : 0,
+      rateTech:  phoneScreen   > 0 ? techInterview / phoneScreen   : 0,
+      rateFinal: techInterview > 0 ? finalRound    / techInterview : 0,
+      rateOff:   finalRound    > 0 ? offer         / finalRound    : 0,
     };
   });
 
@@ -91,10 +106,10 @@ export class StatsComponent implements OnInit {
     return this._apps().filter(a => a.appliedDate && new Date(a.appliedDate).getTime() >= cutoff).length;
   });
 
-  /** Apps in applied/phone_screen with no update in >14 days - may be ghosting */
+  /** Apps in active interview stages with no update in >14 days - may be ghosting */
   readonly awaitingResponse = computed(() =>
     this._apps().filter(a => {
-      if (!['applied', 'phone_screen'].includes(a.status)) return false;
+      if (!['applied', 'phone_screen', 'technical_interview', 'final_round'].includes(a.status)) return false;
       if (!a.updatedAt) return false;
       return (Date.now() - new Date(a.updatedAt).getTime()) / 86_400_000 > 14;
     }),
