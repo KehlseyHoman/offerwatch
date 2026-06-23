@@ -44,8 +44,17 @@ export class RegisterComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const google = (window as any)['google'];
-    if (!google) return;
+    if (google) {
+      this.initGoogleButton(google);
+    } else {
+      const script = document.querySelector('script[src*="accounts.google.com/gsi/client"]');
+      script?.addEventListener('load', () => {
+        this.ngZone.run(() => this.initGoogleButton((window as any)['google']));
+      });
+    }
+  }
 
+  private initGoogleButton(google: any): void {
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: (response: { credential: string }) => {

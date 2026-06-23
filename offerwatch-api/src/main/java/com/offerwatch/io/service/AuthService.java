@@ -26,6 +26,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final RestClient googleTokenClient;
 
     @Value("${google.client-id}")
     private String googleClientId;
@@ -81,6 +82,18 @@ public class AuthService {
             throw new InvalidGoogleTokenException("Token audience mismatch");
         }
 
+        Object emailVerifiedRaw = payload.get("email_verified");
+        boolean emailVerified = "true".equals(emailVerifiedRaw) || Boolean.TRUE.equals(emailVerifiedRaw);
+        if (email == null || email.isBlank()) {
+            throw new InvalidGoogleTokenException("Missing email claim");
+        }
+        if (googleId == null) {
+            throw new InvalidGoogleTokenException("Missing sub claim");
+        }
+        if (!emailVerified) {
+            throw new InvalidGoogleTokenException("Email not verified");
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
@@ -91,6 +104,8 @@ public class AuthService {
                     .build();
         } else if (user.getGoogleId() == null) {
             user.setGoogleId(googleId);
+        } else if (!googleId.equals(user.getGoogleId())) {
+            throw new InvalidGoogleTokenException("Google account mismatch");
         }
 
         user = userRepository.save(user);
@@ -99,7 +114,7 @@ public class AuthService {
 
     private Map<String, Object> verifyGoogleToken(String idTokenString) {
         try {
-            return RestClient.create()
+            return googleTokenClient
                     .get()
                     .uri("https://oauth2.googleapis.com/tokeninfo?id_token={token}", idTokenString)
                     .retrieve()
