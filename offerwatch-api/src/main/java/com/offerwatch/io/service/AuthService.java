@@ -6,12 +6,16 @@ import com.offerwatch.io.entity.User;
 import com.offerwatch.io.repository.UserRepository;
 import com.offerwatch.io.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClient;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -22,6 +26,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+
+    @Value("${google.client-id}")
+    private String googleClientId;
 
     /**
      * Internal result — contains the raw JWT so the controller can set it
@@ -59,6 +66,49 @@ public class AuthService {
         return buildResult(user);
     }
 
+    // ── Google Sign-In ────────────────────────────────────────────────────────
+
+    @Transactional
+    public AuthResult googleSignIn(String idTokenString) {
+        Map<String, Object> payload = verifyGoogleToken(idTokenString);
+
+        String email    = (String) payload.get("email");
+        String name     = (String) payload.get("name");
+        String googleId = (String) payload.get("sub");
+        String aud      = (String) payload.get("aud");
+
+        if (!googleClientId.equals(aud)) {
+            throw new InvalidGoogleTokenException("Token audience mismatch");
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            user = User.builder()
+                    .email(email)
+                    .name(name != null ? name : email)
+                    .googleId(googleId)
+                    .build();
+        } else if (user.getGoogleId() == null) {
+            user.setGoogleId(googleId);
+        }
+
+        user = userRepository.save(user);
+        return buildResult(user);
+    }
+
+    private Map<String, Object> verifyGoogleToken(String idTokenString) {
+        try {
+            return RestClient.create()
+                    .get()
+                    .uri("https://oauth2.googleapis.com/tokeninfo?id_token={token}", idTokenString)
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {});
+        } catch (Exception e) {
+            throw new InvalidGoogleTokenException("Google token validation failed");
+        }
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private AuthResult buildResult(User user) {
@@ -67,9 +117,13 @@ public class AuthService {
         return new AuthResult(token, expiresAt, user.getId(), user.getEmail(), user.getName());
     }
 
-    // ── Custom exception ──────────────────────────────────────────────────────
+    // ── Custom exceptions ─────────────────────────────────────────────────────
 
     public static class EmailAlreadyUsedException extends RuntimeException {
         public EmailAlreadyUsedException(String message) { super(message); }
+    }
+
+    public static class InvalidGoogleTokenException extends RuntimeException {
+        public InvalidGoogleTokenException(String message) { super(message); }
     }
 }

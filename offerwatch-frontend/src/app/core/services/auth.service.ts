@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
+import { AuthResponse, GoogleSignInRequest, LoginRequest, RegisterRequest } from '../models/auth.model';
 
 const USER_KEY = 'ow_user';
 
@@ -26,6 +26,13 @@ export class AuthService {
   login(req: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/login`, req, { withCredentials: true })
+      .pipe(tap(res => this.persist(res)));
+  }
+
+  googleSignIn(idToken: string): Observable<AuthResponse> {
+    const req: GoogleSignInRequest = { idToken };
+    return this.http
+      .post<AuthResponse>(`${environment.apiUrl}/auth/google`, req, { withCredentials: true })
       .pipe(tap(res => this.persist(res)));
   }
 

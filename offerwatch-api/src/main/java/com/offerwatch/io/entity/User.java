@@ -30,10 +30,14 @@ public class User {
     @Column
     private String name;
 
-    /** BCrypt hash — never serialized to JSON. */
+    /** BCrypt hash — never serialized to JSON. Null for Google-only accounts. */
     @JsonIgnore
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash")
     private String passwordHash;
+
+    /** Google OAuth subject ID — null for email/password accounts. */
+    @Column(name = "google_id", unique = true)
+    private String googleId;
 
     /** Pro subscribers bypass the free-tier application cap. */
     @Column(name = "is_pro", nullable = false)
