@@ -100,10 +100,7 @@
               <div class="funnel-bar phone_screen"
                    [style.width.%]="p.applied > 0 ? (p.phoneScreen / p.applied * 100) : 0"></div>
             </div>
-            <span class="funnel-count">
-              {{ p.phoneScreen }}
-              <span class="funnel-rate">{{ p.ratePS | percent:'1.0-0' }}</span>
-            </span>
+            <span class="funnel-count">{{ p.phoneScreen }}</span>
           </div>
 
           <div class="funnel-row">
@@ -112,10 +109,7 @@
               <div class="funnel-bar technical_interview"
                    [style.width.%]="p.applied > 0 ? (p.techInterview / p.applied * 100) : 0"></div>
             </div>
-            <span class="funnel-count">
-              {{ p.techInterview }}
-              <span class="funnel-rate">{{ p.rateTech | percent:'1.0-0' }}</span>
-            </span>
+            <span class="funnel-count">{{ p.techInterview }}</span>
           </div>
 
           <div class="funnel-row">
@@ -124,10 +118,7 @@
               <div class="funnel-bar final_round"
                    [style.width.%]="p.applied > 0 ? (p.finalRound / p.applied * 100) : 0"></div>
             </div>
-            <span class="funnel-count">
-              {{ p.finalRound }}
-              <span class="funnel-rate">{{ p.rateFinal | percent:'1.0-0' }}</span>
-            </span>
+            <span class="funnel-count">{{ p.finalRound }}</span>
           </div>
 
           <div class="funnel-row">
@@ -136,10 +127,7 @@
               <div class="funnel-bar offer"
                    [style.width.%]="p.applied > 0 ? (p.offer / p.applied * 100) : 0"></div>
             </div>
-            <span class="funnel-count">
-              {{ p.offer }}
-              <span class="funnel-rate">{{ p.rateOff | percent:'1.0-0' }}</span>
-            </span>
+            <span class="funnel-count">{{ p.offer }}</span>
           </div>
 
         </div>

@@ -9,6 +9,10 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface GoogleSignInRequest {
+  idToken: string;
+}
+
 /**
  * Returned by POST /api/auth/login and /register.
  * The JWT is NOT here - it lives in an httpOnly cookie the browser manages

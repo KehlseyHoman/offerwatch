@@ -27,9 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "No user found with email: " + email));
 
+        // Google-only users have no password; use empty string so BCrypt comparison
+        // fails gracefully rather than throwing NullPointerException.
+        String password = user.getPasswordHash() != null ? user.getPasswordHash() : "";
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
-                user.getPasswordHash(),
+                password,
                 List.of()   // authorities — extend when roles are needed
         );
     }

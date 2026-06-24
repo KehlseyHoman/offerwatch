@@ -1,6 +1,7 @@
 package com.offerwatch.io.controller;
 
 import com.offerwatch.io.dto.AuthResponse;
+import com.offerwatch.io.dto.GoogleTokenRequest;
 import com.offerwatch.io.dto.LoginRequest;
 import com.offerwatch.io.dto.RegisterRequest;
 import com.offerwatch.io.service.AuthService;
@@ -48,6 +49,16 @@ public class AuthController {
         return new AuthResponse(result.userId(), result.email(), result.name(), result.expiresAt());
     }
 
+    // ── Google Sign-In ────────────────────────────────────────────────────────
+
+    @PostMapping("/google")
+    public AuthResponse googleSignIn(@Valid @RequestBody GoogleTokenRequest request,
+                                     HttpServletResponse response) {
+        AuthService.AuthResult result = authService.googleSignIn(request.idToken());
+        setJwtCookie(response, result.token(), result.expiresAt());
+        return new AuthResponse(result.userId(), result.email(), result.name(), result.expiresAt());
+    }
+
     // ── Logout ────────────────────────────────────────────────────────────────
 
     /** Clears the JWT cookie by setting it to an empty value with maxAge=0. */
@@ -91,5 +102,11 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ProblemDetail.forStatusAndDetail(
                         HttpStatus.UNAUTHORIZED, "Invalid email or password."));
+    }
+
+    @ExceptionHandler(AuthService.InvalidGoogleTokenException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidGoogleToken(AuthService.InvalidGoogleTokenException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Google sign-in failed."));
     }
 }
