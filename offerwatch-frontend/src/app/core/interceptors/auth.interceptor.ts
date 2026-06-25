@@ -2,24 +2,23 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { LoggerService } from '../services/logger.service';
 
-/**
- * Attaches credentials (the httpOnly JWT cookie) to every request so the
- * browser sends it automatically, and catches 401 responses to auto-logout.
- *
- * withCredentials: true  → browser includes cookies on cross-origin requests
- *   (same-origin via the dev proxy, or production domain when deployed)
- */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const auth = inject(AuthService);
+  const auth   = inject(AuthService);
+  const logger = inject(LoggerService);
 
   const credReq = req.clone({ withCredentials: true });
 
   return next(credReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      // Don't handle 401 on auth endpoints - avoids potential logout loops
-      if (err.status === 401 && !req.url.includes('/auth/')) {
-        auth.logout();
+      if (err.status === 401) {
+        if (req.url.includes('/auth/')) {
+          logger.warn(`authInterceptor: 401 on auth endpoint ${req.url} — not logging out`);
+        } else {
+          logger.warn(`authInterceptor: 401 on ${req.url} — logging out`);
+          auth.logout();
+        }
       }
       return throwError(() => err);
     }),

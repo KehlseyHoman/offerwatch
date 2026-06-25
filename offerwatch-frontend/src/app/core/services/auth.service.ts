@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, GoogleSignInRequest, LoginRequest, RegisterRequest } from '../models/auth.model';
+import { LoggerService } from './logger.service';
 
 const USER_KEY = 'ow_user';
 
@@ -15,29 +16,38 @@ export class AuthService {
   readonly isLoggedIn  = computed(() => this._authResponse() !== null);
   readonly currentUser = computed(() => this._authResponse());
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private logger: LoggerService) {}
 
   register(req: RegisterRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/register`, req, { withCredentials: true })
-      .pipe(tap(res => this.persist(res)));
+      .pipe(tap(res => {
+        this.logger.info(`AuthService: registered, session expires ${new Date(res.expiresAt).toISOString()}`);
+        this.persist(res);
+      }));
   }
 
   login(req: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/login`, req, { withCredentials: true })
-      .pipe(tap(res => this.persist(res)));
+      .pipe(tap(res => {
+        this.logger.info(`AuthService: logged in, session expires ${new Date(res.expiresAt).toISOString()}`);
+        this.persist(res);
+      }));
   }
 
   googleSignIn(idToken: string): Observable<AuthResponse> {
     const req: GoogleSignInRequest = { idToken };
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/google`, req, { withCredentials: true })
-      .pipe(tap(res => this.persist(res)));
+      .pipe(tap(res => {
+        this.logger.info(`AuthService: Google sign-in, session expires ${new Date(res.expiresAt).toISOString()}`);
+        this.persist(res);
+      }));
   }
 
   logout(): void {
-    // Tell the server to clear the httpOnly cookie (best-effort; clear locally regardless)
+    this.logger.info('AuthService: logging out');
     this.http
       .post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true })
       .subscribe();
@@ -45,10 +55,6 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  /**
-   * Check expiry using the timestamp stored alongside the user info.
-   * No JWT decoding needed - the server told us when it expires at login time.
-   */
   isTokenExpired(): boolean {
     const user = this._authResponse();
     if (!user) return true;
@@ -69,8 +75,13 @@ export class AuthService {
   private loadFromStorage(): AuthResponse | null {
     try {
       const raw = localStorage.getItem(USER_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      const session: AuthResponse = JSON.parse(raw);
+      const expired = Date.now() >= session.expiresAt;
+      this.logger.info(`AuthService: restored session, expired: ${expired}, expiresAt: ${new Date(session.expiresAt).toISOString()}`);
+      return session;
     } catch {
+      this.logger.warn('AuthService: failed to parse stored session, clearing');
       return null;
     }
   }
