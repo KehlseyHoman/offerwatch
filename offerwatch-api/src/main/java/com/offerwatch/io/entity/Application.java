@@ -53,7 +53,7 @@ public class Application {
     @Column
     private String location;
 
-    @Column(name = "job_url")
+    @Column(name = "job_url", columnDefinition = "TEXT")
     private String jobUrl;
 
     @Column(name = "salary_min")
