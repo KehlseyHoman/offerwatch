@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
@@ -11,12 +11,14 @@ const USER_KEY = 'ow_user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _authResponse = signal<AuthResponse | null>(this.loadFromStorage());
+  private _authResponse: WritableSignal<AuthResponse | null>;
 
   readonly isLoggedIn  = computed(() => this._authResponse() !== null);
   readonly currentUser = computed(() => this._authResponse());
 
-  constructor(private http: HttpClient, private router: Router, private logger: LoggerService) {}
+  constructor(private http: HttpClient, private router: Router, private logger: LoggerService) {
+    this._authResponse = signal(this.loadFromStorage());
+  }
 
   register(req: RegisterRequest): Observable<AuthResponse> {
     return this.http
