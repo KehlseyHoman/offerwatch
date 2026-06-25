@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import java.util.UUID;
  * Requests without a valid cookie pass through unauthenticated; Spring Security
  * then rejects them with 401 if the route requires authentication.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -39,7 +41,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = extractFromCookie(request);
 
-        if (token == null || !jwtUtil.isValid(token)) {
+        if (token == null) {
+            log.info("JWT cookie missing on {} {}", request.getMethod(), request.getRequestURI());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (!jwtUtil.isValid(token)) {
+            log.info("Invalid JWT on {} {}", request.getMethod(), request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }

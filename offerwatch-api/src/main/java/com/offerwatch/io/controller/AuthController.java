@@ -68,7 +68,7 @@ public class AuthController {
         ResponseCookie cleared = ResponseCookie.from("jwt", "")
                 .httpOnly(true)
                 .secure(cookieSecure)
-                .sameSite("Lax")
+                .sameSite(cookieSecure ? "None" : "Lax")
                 .path("/api")
                 .maxAge(0)
                 .build();
@@ -79,11 +79,15 @@ public class AuthController {
 
     private void setJwtCookie(HttpServletResponse response, String token, long expiresAt) {
         long maxAgeSeconds = Math.max(0, (expiresAt - System.currentTimeMillis()) / 1000);
+        // SameSite=None is required in production where the frontend and API are on
+        // different subdomains — Lax blocks cookies on cross-origin AJAX requests.
+        // SameSite=None requires Secure=true, which is already enforced by cookieSecure.
+        String sameSite = cookieSecure ? "None" : "Lax";
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
-                .httpOnly(true)          // JS cannot read this cookie at all
-                .secure(cookieSecure)    // send only over HTTPS in production
-                .sameSite("Lax")        // blocks cross-site POST forgery; fine for same-site API
-                .path("/api")            // cookie only sent on /api/* requests
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .sameSite(sameSite)
+                .path("/api")
                 .maxAge(maxAgeSeconds)
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
