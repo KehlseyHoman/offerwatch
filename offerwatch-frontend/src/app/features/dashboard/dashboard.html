@@ -47,6 +47,44 @@
 
   <!-- ── Applications table ───────────────────────────────────────────────── -->
   @else {
+    <div class="table-toolbar">
+      <div class="toolbar-top">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Search by company, role, or location…"
+                 [value]="textFilter()"
+                 (input)="onSearch($any($event.target).value)" />
+          @if (textFilter()) {
+            <button matSuffix mat-icon-button aria-label="Clear search" (click)="onSearch('')">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        <button mat-stroked-button [matMenuTriggerFor]="colMenu" class="columns-btn">
+          <mat-icon>view_column</mat-icon>
+          Columns
+        </button>
+      </div>
+
+      <mat-chip-listbox [multiple]="true" (change)="onStatusFilterChange($event.value)" class="status-chips">
+        @for (row of metricRows; track row.key) {
+          <mat-chip-option [value]="row.key" [selected]="statusFilter().has(row.key)">
+            <span class="status-dot" [class]="'dot-' + row.key"></span>
+            {{ row.label }}
+            <span class="chip-count">{{ statCounts()[row.key] }}</span>
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
+
+      <mat-menu #colMenu="matMenu">
+        @for (col of optionalColumns; track col.key) {
+          <button mat-menu-item (click)="$event.stopPropagation(); toggleColumn(col.key)">
+            <mat-icon>{{ isVisible(col.key) ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+            {{ col.label }}
+          </button>
+        }
+      </mat-menu>
+    </div>
     <div class="table-wrapper">
       <div class="table-scroll">
         <table mat-table [dataSource]="dataSource" matSort class="app-table">
@@ -156,8 +194,14 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="app-row"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns();" class="app-row"></tr>
+          <tr class="mat-mdc-row no-data-row" *matNoDataRow>
+            <td class="mat-mdc-cell" [attr.colspan]="displayedColumns().length">
+              No applications match your filters.
+              <button mat-button color="primary" (click)="clearFilters()">Clear filters</button>
+            </td>
+          </tr>
 
         </table>
       </div>

@@ -13,6 +13,8 @@ import { MatDialog }                from '@angular/material/dialog';
 import { MatSnackBar }              from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule }         from '@angular/material/tooltip';
+import { MatFormFieldModule }       from '@angular/material/form-field';
+import { MatInputModule }           from '@angular/material/input';
 import { DecimalPipe, DatePipe }    from '@angular/common';
 
 import {
@@ -31,6 +33,7 @@ import { ApplicationFormComponent } from '../application-form/application-form';
     MatButtonModule, MatIconModule,
     MatChipsModule, MatMenuModule,
     MatProgressSpinnerModule, MatTooltipModule,
+    MatFormFieldModule, MatInputModule,
     DecimalPipe, DatePipe,
   ],
   templateUrl: './dashboard.html',
@@ -64,9 +67,38 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   });
 
   // ── Table config ──────────────────────────────────────────────────────────
-  readonly displayedColumns = [
+  private readonly ALL_COLUMNS = [
     'company', 'status', 'location', 'salary', 'appliedDate', 'lastActivity', 'link', 'actions',
   ];
+
+  readonly optionalColumns: { key: string; label: string }[] = [
+    { key: 'status',       label: 'Status'        },
+    { key: 'location',     label: 'Location'      },
+    { key: 'salary',       label: 'Salary'        },
+    { key: 'appliedDate',  label: 'Applied date'  },
+    { key: 'lastActivity', label: 'Last activity' },
+    { key: 'link',         label: 'Job link'      },
+  ];
+
+  private readonly hiddenCols = signal(new Set<string>());
+
+  readonly displayedColumns = computed(() =>
+    this.ALL_COLUMNS.filter(col => !this.hiddenCols().has(col))
+  );
+
+  isVisible(col: string): boolean { return !this.hiddenCols().has(col); }
+
+  toggleColumn(col: string): void {
+    this.hiddenCols.update(s => {
+      const next = new Set(s);
+      next.has(col) ? next.delete(col) : next.add(col);
+      return next;
+    });
+  }
+
+  // ── Filters ───────────────────────────────────────────────────────────────
+  textFilter   = signal('');
+  statusFilter = signal(new Set<ApplicationStatus>());
 
   readonly statuses     = APPLICATION_STATUSES;
   readonly statusLabels = STATUS_LABELS;
@@ -103,6 +135,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         case 'lastActivity': return app.updatedAt ?? '';
         default:             return '';
       }
+    };
+
+    this.dataSource.filterPredicate = (app, filterStr) => {
+      const { text, statuses } = JSON.parse(filterStr) as { text: string; statuses: ApplicationStatus[] };
+      if (statuses.length && !statuses.includes(app.status)) return false;
+      if (!text) return true;
+      return [app.company, app.roleTitle, app.location]
+        .filter(Boolean).join(' ').toLowerCase().includes(text);
     };
   }
 
@@ -168,6 +208,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       next:  () => { this.load(); this.snack.open('Deleted.', '', { duration: 2000 }); },
       error: ()  => this.snack.open('Failed to delete.', '', { duration: 3000 }),
     });
+  }
+
+  // ── Filter actions ────────────────────────────────────────────────────────
+  onSearch(value: string): void {
+    this.textFilter.set(value);
+    this.applyFilter();
+  }
+
+  onStatusFilterChange(selected: string[]): void {
+    this.statusFilter.set(new Set(selected as ApplicationStatus[]));
+    this.applyFilter();
+  }
+
+  clearFilters(): void {
+    this.textFilter.set('');
+    this.statusFilter.set(new Set());
+    this.dataSource.filter = '';
+  }
+
+  private applyFilter(): void {
+    const text    = this.textFilter().toLowerCase().trim();
+    const statuses = [...this.statusFilter()];
+    this.dataSource.filter = (text || statuses.length)
+      ? JSON.stringify({ text, statuses })
+      : '';
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────

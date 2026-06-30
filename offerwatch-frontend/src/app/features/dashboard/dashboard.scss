@@ -63,6 +63,49 @@
 .metric-offer               { .metric-value { color: #1b5e20; } }
 .metric-rejected            { .metric-value { color: #b71c1c; } }
 
+// ── Table toolbar ─────────────────────────────────────────────────────────
+.table-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.toolbar-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-field {
+  flex: 1;
+  // Tighten the inner padding so the field is compact
+  .mat-mdc-form-field-infix { padding-top: 6px !important; padding-bottom: 6px !important; min-height: unset !important; }
+}
+
+.columns-btn {
+  font-size: 13px !important;
+  height: 36px !important;
+  white-space: nowrap;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; margin-right: 4px; }
+}
+
+.status-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.chip-count {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-left: 3px;
+}
+
+.no-data-row td {
+  text-align: center;
+  padding: 48px 24px;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 14px;
+}
+
 // ── Table wrapper ─────────────────────────────────────────────────────────
 // The outer wrapper takes remaining vertical space and clips;
 // the inner scroll div scrolls horizontally AND vertically.
