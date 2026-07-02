@@ -2,7 +2,7 @@
 
 A full-stack job application tracker built for software engineers actively in a job search. Track applications through the entire hiring pipeline, prep for interviews, and spot patterns in your search — all in one place.
 
-**Live app:** https://job-boards.greenhouse.io/calendly/jobs/8464846002?gh_src=ma4uqj152us
+**Live app:** https://offerwatch-production-8cbf.up.railway.app/
 
 ![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=flat-square&logo=angular)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0-6DB33F?style=flat-square&logo=spring)
@@ -273,8 +273,8 @@ All day-to-day work branches off `dev`. When `dev` is stable and tested, open a 
 
 ## Roadmap
 
-- [ ] Deploy API to Railway / Render
-- [ ] Deploy frontend to Vercel
+- [x] Deploy API to Railway
+- [x] Deploy frontend to Railway
 - [ ] Stripe integration for Pro tier subscriptions
 - [ ] Resume version file storage (S3 / Supabase Storage)
 - [ ] Email reminders for follow-ups
