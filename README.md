@@ -12,6 +12,18 @@ A full-stack job application tracker built for software engineers actively in a 
 
 ---
 
+## Screenshots
+
+| Dashboard | Analytics |
+|---|---|
+| ![Dashboard](screenshots/offerwatch-dashboard.jpg) | ![Analytics](screenshots/offerwatch-stats.jpg) |
+
+| Interview Prep | Behavioral Stories |
+|---|---|
+| ![Interview Prep](screenshots/offerwatch-interview-prep.jpg) | ![Behavioral Stories](screenshots/offerwatch-stories.jpg) |
+
+---
+
 ## Features
 
 ### Application Pipeline
