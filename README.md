@@ -16,11 +16,11 @@ A full-stack job application tracker built for software engineers actively in a 
 
 | Dashboard | Analytics |
 |---|---|
-| ![Dashboard](screenshots/offerwatch-dashboard.jpg) | ![Analytics](screenshots/offerwatch-stats.jpg) |
+| ![Dashboard](offerwatch-frontend/public/assets/screenshots/offerwatch-dashboard.jpg) | ![Analytics](offerwatch-frontend/public/assets/screenshots/offerwatch-stats.jpg) |
 
 | Interview Prep | Behavioral Stories |
 |---|---|
-| ![Interview Prep](screenshots/offerwatch-interview-prep.jpg) | ![Behavioral Stories](screenshots/offerwatch-stories.jpg) |
+| ![Interview Prep](offerwatch-frontend/public/assets/screenshots/offerwatch-interview-prep.jpg) | ![Behavioral Stories](offerwatch-frontend/public/assets/screenshots/offerwatch-stories.jpg) |
 
 ---
 

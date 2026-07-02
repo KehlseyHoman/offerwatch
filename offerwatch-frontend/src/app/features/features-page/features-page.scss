@@ -270,6 +270,13 @@ $surface:    #f8fafc;
   }
 }
 
+// ─── Real screenshot (replaces hand-built mockups) ───────────────────────────
+.mockup-screenshot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 // ─── Dashboard Mockup ─────────────────────────────────────────────────────────
 .mockup-dashboard {
   padding: 14px;
