@@ -12,6 +12,18 @@ A full-stack job application tracker built for software engineers actively in a 
 
 ---
 
+## Screenshots
+
+| Dashboard | Analytics |
+|---|---|
+| ![Dashboard](screenshots/offerwatch-dashboard.jpg) | ![Analytics](screenshots/offerwatch-stats.jpg) |
+
+| Interview Prep | Behavioral Stories |
+|---|---|
+| ![Interview Prep](screenshots/offerwatch-interview-prep.jpg) | ![Behavioral Stories](screenshots/offerwatch-stories.jpg) |
+
+---
+
 ## Features
 
 ### Application Pipeline
@@ -273,8 +285,8 @@ All day-to-day work branches off `dev`. When `dev` is stable and tested, open a 
 
 ## Roadmap
 
-- [ ] Deploy API to Railway / Render
-- [ ] Deploy frontend to Vercel
+- [x] Deploy API to Railway
+- [x] Deploy frontend to Railway
 - [ ] Stripe integration for Pro tier subscriptions
 - [ ] Resume version file storage (S3 / Supabase Storage)
 - [ ] Email reminders for follow-ups
