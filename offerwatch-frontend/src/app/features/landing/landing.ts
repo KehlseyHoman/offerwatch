@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,10 +9,14 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [RouterLink, MatButtonModule, MatIconModule],
   templateUrl: './landing.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './landing.scss',
 })
 export class LandingComponent implements OnInit {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     if (this.auth.isLoggedIn() && !this.auth.isTokenExpired()) {
@@ -67,8 +71,16 @@ export class LandingComponent implements OnInit {
 
   readonly steps = [
     { number: '01', label: 'Create an account', sub: 'Free to start, no credit card needed.' },
-    { number: '02', label: 'Add your first application', sub: 'Paste the job URL and role info in seconds.' },
-    { number: '03', label: 'Track & prep', sub: 'Move statuses, log notes, and prep your answers.' },
+    {
+      number: '02',
+      label: 'Add your first application',
+      sub: 'Paste the job URL and role info in seconds.',
+    },
+    {
+      number: '03',
+      label: 'Track & prep',
+      sub: 'Move statuses, log notes, and prep your answers.',
+    },
     { number: '04', label: 'Land the offer', sub: 'Know exactly where each opportunity stands.' },
   ];
 }
