@@ -1,33 +1,43 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, Inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule }          from '@angular/material/button';
-import { MatFormFieldModule }       from '@angular/material/form-field';
-import { MatInputModule }           from '@angular/material/input';
-import { MatSelectModule }          from '@angular/material/select';
-import { MatDatepickerModule }      from '@angular/material/datepicker';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Application, APPLICATION_STATUSES, STATUS_LABELS } from '../../core/models/application.model';
+import {
+  Application,
+  APPLICATION_STATUSES,
+  STATUS_LABELS,
+} from '../../core/models/application.model';
 import { ApplicationService } from '../../core/services/application.service';
 
 @Component({
   selector: 'app-application-form',
   standalone: true,
   imports: [
-    ReactiveFormsModule, MatDialogModule, MatButtonModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule,
-    MatDatepickerModule, MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './application-form.html',
-  styleUrl:    './application-form.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './application-form.scss',
 })
 export class ApplicationFormComponent {
   form: FormGroup;
-  loading  = signal(false);
-  error    = signal('');
-  isEdit   = false;
+  loading = signal(false);
+  error = signal('');
+  isEdit = false;
 
-  readonly statuses     = APPLICATION_STATUSES;
+  readonly statuses = APPLICATION_STATUSES;
   readonly statusLabels = STATUS_LABELS;
 
   constructor(
@@ -39,14 +49,14 @@ export class ApplicationFormComponent {
     this.isEdit = !!data;
 
     this.form = fb.group({
-      company:     [data?.company ?? '',                              Validators.required],
-      roleTitle:   [data?.roleTitle ?? '',                           []],
-      status:      [data?.status ?? 'saved',                         Validators.required],
-      location:    [data?.location ?? '',                            []],
-      jobUrl:      [data?.jobUrl ?? '',                              []],
-      salaryMin:   [data?.salaryMin ?? null,                         []],
-      salaryMax:   [data?.salaryMax ?? null,                         []],
-      source:      [data?.source ?? '',                              []],
+      company: [data?.company ?? '', Validators.required],
+      roleTitle: [data?.roleTitle ?? '', []],
+      status: [data?.status ?? 'saved', Validators.required],
+      location: [data?.location ?? '', []],
+      jobUrl: [data?.jobUrl ?? '', []],
+      salaryMin: [data?.salaryMin ?? null, []],
+      salaryMax: [data?.salaryMax ?? null, []],
+      source: [data?.source ?? '', []],
       // Datepicker works with Date objects; convert the ISO string on load
       appliedDate: [data?.appliedDate ? parseLocalDate(data.appliedDate) : null, []],
     });
@@ -58,23 +68,21 @@ export class ApplicationFormComponent {
     this.error.set('');
 
     const payload = this.cleanPayload(this.form.value);
-    const req$ = this.isEdit
-      ? this.svc.update(this.data!.id!, payload)
-      : this.svc.create(payload);
+    const req$ = this.isEdit ? this.svc.update(this.data!.id!, payload) : this.svc.create(payload);
 
     req$.subscribe({
-      next:  app  => this.ref.close(app),
-      error: err  => {
+      next: (app) => this.ref.close(app),
+      error: (err) => {
         const detail = err?.error?.detail ?? '';
-        this.error.set(
-          err.status === 402 ? detail : 'Failed to save. Please try again.',
-        );
+        this.error.set(err.status === 402 ? detail : 'Failed to save. Please try again.');
         this.loading.set(false);
       },
     });
   }
 
-  cancel(): void { this.ref.close(null); }
+  cancel(): void {
+    this.ref.close(null);
+  }
 
   /** Strip empties; convert Date → yyyy-MM-dd string for the API */
   private cleanPayload(raw: Record<string, unknown>): Partial<Application> {

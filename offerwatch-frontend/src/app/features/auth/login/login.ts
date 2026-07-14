@@ -1,4 +1,12 @@
-import { Component, signal, AfterViewInit, ElementRef, ViewChild, NgZone } from '@angular/core';
+import {
+  Component,
+  signal,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+  NgZone,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -14,30 +22,36 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-login',
   standalone: true,
   imports: [
-    ReactiveFormsModule, RouterLink,
-    MatCardModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatProgressSpinnerModule, MatIconModule
+    ReactiveFormsModule,
+    RouterLink,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './login.scss',
 })
 export class LoginComponent implements AfterViewInit {
   @ViewChild('googleBtn') googleBtnRef!: ElementRef;
 
   form: FormGroup;
-  loading  = signal(false);
-  error    = signal('');
+  loading = signal(false);
+  error = signal('');
   showPass = signal(false);
 
   constructor(
     fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {
     this.form = fb.group({
-      email:    ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
   }
 
@@ -58,7 +72,7 @@ export class LoginComponent implements AfterViewInit {
       client_id: environment.googleClientId,
       callback: (response: { credential: string }) => {
         this.ngZone.run(() => this.handleGoogleCredential(response.credential));
-      }
+      },
     });
 
     google.accounts.id.renderButton(this.googleBtnRef.nativeElement, {
@@ -66,7 +80,7 @@ export class LoginComponent implements AfterViewInit {
       theme: 'outline',
       size: 'large',
       width: 392,
-      text: 'signin_with'
+      text: 'signin_with',
     });
   }
 
@@ -76,11 +90,11 @@ export class LoginComponent implements AfterViewInit {
     this.error.set('');
 
     this.auth.login(this.form.value).subscribe({
-      next:  () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/dashboard']),
       error: (err) => {
         this.error.set(err?.error?.detail ?? 'Invalid email or password.');
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -89,11 +103,11 @@ export class LoginComponent implements AfterViewInit {
     this.error.set('');
 
     this.auth.googleSignIn(idToken).subscribe({
-      next:  () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/dashboard']),
       error: (err) => {
         this.error.set(err?.error?.detail ?? 'Google sign-in failed. Please try again.');
         this.loading.set(false);
-      }
+      },
     });
   }
 }
